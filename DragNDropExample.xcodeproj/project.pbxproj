@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		307BF1381B1E71670044BD8A /* DragNDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 307BF1371B1E71670044BD8A /* DragNDrop.m */; };
+		45A631E11B61A21B00D755AD /* DLDraggedCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = 45A631E01B61A21B00D755AD /* DLDraggedCellData.m */; };
 		45B11D131B1DEFD80006C937 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 45B11D121B1DEFD80006C937 /* main.m */; };
 		45B11D161B1DEFD80006C937 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 45B11D151B1DEFD80006C937 /* AppDelegate.m */; };
 		45B11D1E1B1DEFD80006C937 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45B11D1D1B1DEFD80006C937 /* Images.xcassets */; };
@@ -32,6 +33,8 @@
 		306687121B1E7723008DEABA /* RBSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBSplitViewController.m; sourceTree = "<group>"; };
 		307BF1361B1E71670044BD8A /* DragNDrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragNDrop.h; sourceTree = "<group>"; };
 		307BF1371B1E71670044BD8A /* DragNDrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragNDrop.m; sourceTree = "<group>"; };
+		45A631DF1B61A21B00D755AD /* DLDraggedCellData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLDraggedCellData.h; sourceTree = "<group>"; };
+		45A631E01B61A21B00D755AD /* DLDraggedCellData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLDraggedCellData.m; sourceTree = "<group>"; };
 		45B11D0D1B1DEFD80006C937 /* DragNDropExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DragNDropExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45B11D111B1DEFD80006C937 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		45B11D121B1DEFD80006C937 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -72,6 +75,8 @@
 				306687121B1E7723008DEABA /* RBSplitViewController.m */,
 				307BF1361B1E71670044BD8A /* DragNDrop.h */,
 				307BF1371B1E71670044BD8A /* DragNDrop.m */,
+				45A631DF1B61A21B00D755AD /* DLDraggedCellData.h */,
+				45A631E01B61A21B00D755AD /* DLDraggedCellData.m */,
 			);
 			name = DragNDrop;
 			sourceTree = "<group>";
@@ -237,6 +242,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				45B11D161B1DEFD80006C937 /* AppDelegate.m in Sources */,
+				45A631E11B61A21B00D755AD /* DLDraggedCellData.m in Sources */,
 				45B11D3E1B1DF2EF0006C937 /* MainViewController.m in Sources */,
 				45B11D131B1DEFD80006C937 /* main.m in Sources */,
 				307BF1381B1E71670044BD8A /* DragNDrop.m in Sources */,

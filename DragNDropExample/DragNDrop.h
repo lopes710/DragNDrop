@@ -19,6 +19,6 @@
 
 + (id)sharedManager;
 
-- (void)addTable:(UITableView *)tableView datasSource:(NSArray *)datasource delegate:(id)delegate;
+- (void)addTable:(UITableView *)tableView dataSource:(NSArray *)datasource delegate:(id)delegate;
 
 @end
