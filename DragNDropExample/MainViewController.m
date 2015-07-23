@@ -63,11 +63,8 @@
     self.tableNumbers.dataSource = self;
     self.tableNumbers.delegate = self;
     
-    [[DragNDrop sharedManager] addTable:self.tableLetters withDatasSource:self.tableLettersDataSource];
-    [[DragNDrop sharedManager] addTable:self.tableNumbers withDatasSource:self.tableNumbersDataSource];
-    DragNDrop *dragNdrop = [DragNDrop sharedManager];
-    
-    dragNdrop.delegate = self;
+    [[DragNDrop sharedManager] addTable:self.tableLetters datasSource:self.tableLettersDataSource delegate:self];
+    [[DragNDrop sharedManager] addTable:self.tableNumbers datasSource:self.tableNumbersDataSource delegate:self];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView
@@ -122,9 +119,17 @@
 
 #pragma mark - DragNDropDelegate
 
-- (void)didDragOutside:(NSMutableArray *)datasource {
+- (void)didDragOutside:(UITableView *)tableView updatedDatasource:(NSMutableArray *)datasource {
 
-    self.tableNumbersDataSource = datasource;
+    if(tableView == self.tableLetters) {
+        
+        self.tableLettersDataSource = datasource;
+        
+    } else {
+        
+        self.tableNumbersDataSource = datasource;
+        
+    }
 }
 
 @end

@@ -14,11 +14,15 @@ typedef void(^DLCellOnLongPressCompletionBlock)(UIView *selectedCell, NSIndexPat
 
 @property (nonatomic, strong) NSMutableArray *tablesArray;
 @property (nonatomic, strong) NSMutableArray *dataSourceArray;
+@property (nonatomic, strong) NSMutableArray *delegatesArray;
+
 @property (nonatomic, strong) UILongPressGestureRecognizer *longPress;
-@property (nonatomic, strong) UITableView *selectedTableView;
-//@property (nonatomic, strong) UITableViewCell *selectedCell;
 @property (nonatomic, strong) UIImageView *selectedCell;
 @property (nonatomic) CGPoint pointPositionInCell;
+
+@property (nonatomic, assign) NSInteger selectedListIndexPathRow;
+
+@property (nonatomic) id currentDraggedItem;
 
 @end
 
@@ -32,6 +36,7 @@ typedef void(^DLCellOnLongPressCompletionBlock)(UIView *selectedCell, NSIndexPat
         
         _tablesArray = [NSMutableArray array];
         _dataSourceArray = [NSMutableArray array];
+        _delegatesArray = [NSMutableArray array];
     }
     
     return self;
@@ -48,12 +53,11 @@ typedef void(^DLCellOnLongPressCompletionBlock)(UIView *selectedCell, NSIndexPat
     return sharedManager;
 }
 
-- (void)addTable:(UITableView *)tableView withDatasSource:(NSArray *)datasource {
+- (void)addTable:(UITableView *)tableView datasSource:(NSArray *)datasource delegate:(id)delegate {
 
     [self.tablesArray addObject:tableView];
-    
-    //change NSarray to NSMutableArray
     [self.dataSourceArray addObject:datasource];
+    [self.delegatesArray addObject:delegate];
     
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
     longPress.minimumPressDuration = 0.2f;
@@ -61,6 +65,21 @@ typedef void(^DLCellOnLongPressCompletionBlock)(UIView *selectedCell, NSIndexPat
 }
 
 #pragma mark - private methods
+
+- (UITableView *)getSelectedTableView {
+
+    return self.tablesArray[self.selectedListIndexPathRow];
+}
+
+- (NSMutableArray *)getSelectedDataSource {
+    
+    return self.dataSourceArray[self.selectedListIndexPathRow];
+}
+
+- (id)getSelectedDelegate {
+    
+    return self.delegatesArray[self.selectedListIndexPathRow];
+}
 
 //- (Class)classOfElement:(id)element {
 //
@@ -117,54 +136,51 @@ typedef void(^DLCellOnLongPressCompletionBlock)(UIView *selectedCell, NSIndexPat
          withCompletionHandler:(DLCellOnLongPressCompletionBlock)completionBlock {
 
     // set selected table
-    for (UITableView *tableView in self.tablesArray) {
+//    for (UITableView *tableView in self.tablesArray) {
+//        
+//        if (sender.view == tableView) {
+//            
+//            self.selectedTableView = tableView;
+//        }
+//    }
+    
+    [self.tablesArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         
-        if (sender.view == tableView) {
-            
-            self.selectedTableView = tableView;
+        if (sender.view == obj) {
+        
+            self.selectedListIndexPathRow = idx;
         }
-    }
+    }];
+    
+    UITableView *selectedTableView = [self getSelectedTableView];
     
     // get point in tableView to find the indexPath of selected cell
-    CGPoint pointPositionInTableView = [sender locationInView:self.selectedTableView];
-    NSIndexPath *indexPath = [self.selectedTableView indexPathForRowAtPoint:pointPositionInTableView];
+    CGPoint pointPositionInTableView = [sender locationInView:selectedTableView];
+    NSIndexPath *indexPath = [selectedTableView indexPathForRowAtPoint:pointPositionInTableView];
     
     if (indexPath) {
         
         // create image representation of cell
-        UITableViewCell *cell = [self.selectedTableView cellForRowAtIndexPath:indexPath];
+        UITableViewCell *cell = [selectedTableView cellForRowAtIndexPath:indexPath];
         self.selectedCell = [[UIImageView alloc] initWithFrame:cell.frame];
-        
-//        self.selectedCell = [self.selectedTableView cellForRowAtIndexPath:indexPath];
         
         UIGraphicsBeginImageContext(cell.bounds.size);
         [cell.layer renderInContext:UIGraphicsGetCurrentContext()];
         UIImage *imageCell = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
-//        [self.selectedCell.contentView addSubview:[[UIImageView alloc] initWithImage:imageCell]];
+        UIImageView *imageViewCell = [[UIImageView alloc] initWithImage:imageCell];
         
-        UIImageView *testImage = [[UIImageView alloc] initWithImage:imageCell];
-        
-//        self.selectedCell = [[UIImageView alloc] initWithImage:imageCell];
-        
-        [self.selectedCell addSubview:testImage];
-        self.selectedCell.layer.borderColor = [UIColor redColor].CGColor;
-        self.selectedCell.layer.borderWidth = 2.0;
-        
-        
-        
-//        [self.selectedTableView addSubview:testImage];
-
+        [self.selectedCell addSubview:imageViewCell];
         
         
         // antigo
-//        self.selectedCell = [self.selectedTableView cellForRowAtIndexPath:indexPath];
+//        self.selectedCell = [selectedTableView cellForRowAtIndexPath:indexPath];
+//        self.pointPositionInCell = [sender locationInView:self.selectedCell];
         
         // get point in selectedCell to reposition the copied cell to the correct place
-//        self.pointPositionInCell = [sender locationInView:self.selectedCell];
         self.pointPositionInCell = [sender locationInView:cell];
-        
+
         CGPoint pointPositionOriginPressed = CGPointMake(pointPositionPressed.x - self.pointPositionInCell.x, pointPositionPressed.y - self.pointPositionInCell.y);
         
         self.selectedCell.frame = CGRectMake(pointPositionOriginPressed.x, pointPositionOriginPressed.y, self.selectedCell.frame.size.width, self.selectedCell.frame.size.height);
@@ -177,61 +193,34 @@ typedef void(^DLCellOnLongPressCompletionBlock)(UIView *selectedCell, NSIndexPat
         self.selectedCell = nil;
         completionBlock(nil, nil);
     }
+    
 }
 
 #pragma mark - tableView Updates
 
 - (void)deleteRowAt:(NSIndexPath *)indexPath {
     
-    NSMutableArray *dataSource = [NSMutableArray arrayWithArray:self.dataSourceArray[1]];
-    [dataSource removeObjectAtIndex:indexPath.row];
+    UITableView *selectedTableView = [self getSelectedTableView];
+    id <DragNDropDelegate> delegate = [self getSelectedDelegate];
     
-    [self.delegate didDragOutside:dataSource];
+    if([delegate respondsToSelector:@selector(didDragOutside:updatedDatasource:)]) {
     
-//    NSArray *dataSourceReordered = [NSArray arrayWithArray:dataSource];
-    
-    // save the original dataSource in case the cell gets back to it´s place?
-    self.dataSourceArray[1] = dataSource;
-    
-    [self.selectedTableView beginUpdates];
-    [self.selectedTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-    [self.selectedTableView endUpdates];
-    
-//    if ([self getCurrentCalendarType] == RBCalendarDetailDay) {
-//        [[self getDayTableView] beginUpdates];
-//        [[self getDayTableView] deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-//        [[self getDayTableView] endUpdates];
-//        
-//        [self setCorrectOrderForDayCells];
-//    }
-//    else if ([self getCurrentCalendarType] == RBCalendarDetailWeek) {
-//        UITableView *selectedWeekTable = [self getWeekTableViews][sourceIndex];
-//        
-//        [selectedWeekTable beginUpdates];
-//        [selectedWeekTable deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-//        [selectedWeekTable endUpdates];
-//        
-//        [self setCorrectCellsStylesForWeekCellsAtSourceIndex:sourceIndex];
-//    }
+        NSMutableArray *updatedDataSource = [NSMutableArray arrayWithArray:[self getSelectedDataSource]];
+        
+        // save the original dataSource or item in case the cell gets back to it´s place?
+        self.currentDraggedItem = updatedDataSource[indexPath.row];
+        
+        // remove from data source array and notify delegate of of new data source
+        [updatedDataSource removeObjectAtIndex:indexPath.row];
+        [delegate didDragOutside:selectedTableView updatedDatasource:updatedDataSource];
+        
+        // update local dataSourceArray
+        self.dataSourceArray[self.selectedListIndexPathRow] = updatedDataSource;
+        
+        [selectedTableView beginUpdates];
+        [selectedTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [selectedTableView endUpdates];
+    }
 }
-
-
-
-
-
-// TODO: should be the cell copied or do I use the right one directly??
-//        UIImage *aCellImage;
-//        [selectedTable cellForRowAtIndexPath:indexPath];
-//        NSIndexPath *indexPath = [selectedTable indexPathForRowAtPoint:[sender locationInView:selectedTable]];
-//        if (!indexPath) {
-//            return;
-//        }
-
-//        aCellImage = copyCell.fkit_imageRepresentation;
-
-//        UIGraphicsBeginImageContext(view.bounds.size);
-//        [view.layer renderInContext:UIGraphicsGetCurrentContext()];
-//        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-//        UIGraphicsEndImageContext();
 
 @end

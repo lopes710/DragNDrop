@@ -10,16 +10,14 @@
 
 @protocol DragNDropDelegate <NSObject>
 
-- (void)didDragOutside:(NSMutableArray *)datasource;
+- (void)didDragOutside:(UITableView *)tableView updatedDatasource:(NSMutableArray *)datasource;
 
 @end
 
 @interface DragNDrop : NSObject <UITableViewDelegate>
 
-@property (nonatomic, strong) id <DragNDropDelegate> delegate;
-
 + (id)sharedManager;
 
-- (void)addTable:(UITableView *)tableView withDatasSource:(NSArray *)datasource;
+- (void)addTable:(UITableView *)tableView datasSource:(NSArray *)datasource delegate:(id)delegate;
 
 @end
