@@ -6,16 +6,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DragNDropExample/DragNDrop.m"
-            timestampString = "459359741.868453"
+            timestampString = "459364420.371017"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "218"
-            endingLineNumber = "218"
-            landmarkName = "-deleteRowAt:"
+            startingLineNumber = "190"
+            endingLineNumber = "190"
+            landmarkName = "-getCellOnLongPress:pointPositionPressed:withCompletionHandler:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -26,12 +26,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DragNDropExample/DragNDrop.m"
-            timestampString = "459359753.689744"
+            timestampString = "459364379.619714"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "213"
-            endingLineNumber = "213"
-            landmarkName = "-deleteRowAt:"
+            startingLineNumber = "127"
+            endingLineNumber = "127"
+            landmarkName = "-resetDraggedCell"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

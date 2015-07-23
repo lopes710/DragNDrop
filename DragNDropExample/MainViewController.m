@@ -132,4 +132,17 @@
     }
 }
 
+- (void)didMoveCellToOriginalPosition:(UITableView *)tableView updatedDatasource:(NSMutableArray *)datasource {
+
+    if(tableView == self.tableLetters) {
+        
+        self.tableLettersDataSource = datasource;
+        
+    } else {
+        
+        self.tableNumbersDataSource = datasource;
+        
+    }
+}
+
 @end

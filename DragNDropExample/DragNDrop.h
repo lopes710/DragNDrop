@@ -11,6 +11,7 @@
 @protocol DragNDropDelegate <NSObject>
 
 - (void)didDragOutside:(UITableView *)tableView updatedDatasource:(NSMutableArray *)datasource;
+- (void)didMoveCellToOriginalPosition:(UITableView *)tableView updatedDatasource:(NSMutableArray *)datasource;
 
 @end
 
