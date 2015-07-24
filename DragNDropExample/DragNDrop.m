@@ -26,6 +26,11 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
 // selected cell data
 @property (nonatomic, strong) DLDraggedCellData *draggedCellData;
 
+// blankItem
+@property (nonatomic, assign) BOOL hasBlankItem;
+@property (nonatomic, strong) NSIndexPath *blankItemIndexPath;
+@property (nonatomic) NSInteger blankItemIndexOfList;
+
 @end
 
 @implementation DragNDrop
@@ -67,7 +72,8 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
     [self.dataSourceArray addObject:datasource];
     [self.delegatesArray addObject:delegate];
     
-    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                                                            action:@selector(longPress:)];
     longPress.minimumPressDuration = 0.2f;
     [tableView addGestureRecognizer:longPress];
 }
@@ -76,12 +82,10 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
 
 - (IBAction)longPress:(UILongPressGestureRecognizer *)sender {
     
-    UIView *windowView = [[[UIApplication sharedApplication] windows] lastObject];
+    UIView *windowView = [self getWindowView];
     CGPoint pointPositionPressed = [sender locationInView:windowView];
     
     if (sender.state == UIGestureRecognizerStateBegan) {
-        
-        NSLog(@"Long press began");
         
         [self getCellOnLongPress:sender
             pointPositionPressed:pointPositionPressed
@@ -91,7 +95,8 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
                    
                    self.draggedCellData = draggedCellData;
                    [windowView addSubview:self.draggedCellData.draggedCell];
-                   [self deleteRowAt:self.draggedCellData.selectedIndexPathInsideList];
+                   [self deleteRowAt:self.draggedCellData.selectedIndexPathInsideList
+                          tableIndex:self.draggedCellData.selectedIndexOfList];
                }
            }];
         
@@ -100,11 +105,10 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
         // check if there is a draggedCell
         if (self.draggedCellData.draggedCell) {
             
-            NSLog(@"Long press changed");
+            [self updateCellPosition:pointPositionPressed];
             
-            CGPoint newPointPositionPressed = CGPointMake(pointPositionPressed.x - self.pointPositionInCell.x, pointPositionPressed.y - self.pointPositionInCell.y);
-            
-            self.draggedCellData.draggedCell.frame = CGRectMake(newPointPositionPressed.x, newPointPositionPressed.y, self.draggedCellData.draggedCell.frame.size.width, self.draggedCellData.draggedCell.frame.size.height);
+            [self checkIntersectionWhileStateChanged:sender
+                                          pointPress:pointPositionPressed];
         }
         
     } else if (sender.state == UIGestureRecognizerStateEnded ||
@@ -114,29 +118,43 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
         // check if there is a draggedCell
         if (self.draggedCellData.draggedCell) {
             
-            NSLog(@"Long press ended");
+            if(self.hasBlankItem) {
+                
+                self.hasBlankItem = NO;
+                [self deleteRowAt:self.blankItemIndexPath
+                       tableIndex:self.blankItemIndexOfList];
+                
+            }
             
             //return cell to initial location
             [self repositionCellToOriginalLocation];
+
         }
     }
 }
 
 #pragma mark - Private methods
 
-- (UITableView *)getSelectedTableView {
+- (UIView *)getWindowView {
 
-    return self.tablesArray[self.draggedCellData.selectedIndexOfList];
+    UIView *windowView = [[[UIApplication sharedApplication] windows] lastObject];
+    
+    return windowView;
 }
 
-- (NSArray *)getSelectedDataSource {
-    
-    return self.dataSourceArray[self.draggedCellData.selectedIndexOfList];
+- (UITableView *)getTableView:(NSInteger)index {
+
+    return self.tablesArray[index];
 }
 
-- (id)getSelectedDelegate {
+- (NSArray *)getDataSource:(NSInteger)index {
     
-    return self.delegatesArray[self.draggedCellData.selectedIndexOfList];
+    return self.dataSourceArray[index];
+}
+
+- (id)getDelegate:(NSInteger)index {
+    
+    return self.delegatesArray[index];
 }
 
 //- (Class)classOfElement:(id)element {
@@ -202,6 +220,70 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
     }
 }
 
+- (void)updateCellPosition:(CGPoint)pointPositionPressed {
+
+    CGPoint newPointPositionPressed = CGPointMake(pointPositionPressed.x - self.pointPositionInCell.x, pointPositionPressed.y - self.pointPositionInCell.y);
+    
+    self.draggedCellData.draggedCell.frame = CGRectMake(newPointPositionPressed.x, newPointPositionPressed.y, self.draggedCellData.draggedCell.frame.size.width, self.draggedCellData.draggedCell.frame.size.height);
+}
+
+- (void)checkIntersectionWhileStateChanged:(UILongPressGestureRecognizer *)sender pointPress:(CGPoint)pointPositionPressed {
+
+    UIView *windowView = [self getWindowView];
+    
+    //  check intersections
+    [self.tablesArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        
+        UITableView *tableView = (UITableView *)obj;
+        
+        if(tableView != [self getTableView:self.draggedCellData.selectedIndexOfList]) {
+            
+            CGRect selectedTableViewRect = [windowView convertRect:tableView.frame fromView:tableView.superview];
+            
+            if (CGRectContainsPoint(selectedTableViewRect, pointPositionPressed)) {
+                
+                // get point in tableView where dragged cell is on top to find the indexPath
+                CGPoint pointPositionInTableView = [sender locationInView:tableView];
+                NSIndexPath *indexPath = [tableView indexPathForRowAtPoint:pointPositionInTableView];
+                
+                if(indexPath) {
+                    
+                    if (!self.hasBlankItem) {
+                        
+                        //insert blank row
+                        [self insertRowAt:indexPath
+                               tableIndex:idx
+                                     item:[NSNull null]];
+                        
+                        self.hasBlankItem = YES;
+                        self.blankItemIndexPath = indexPath;
+                        self.blankItemIndexOfList = idx;
+                        
+                    } else {
+                        
+                        //move blank row
+                        [self moveRowFromIndex:self.blankItemIndexPath
+                                       toIndex:indexPath
+                                    tableIndex:idx];
+                        
+                        self.blankItemIndexPath = indexPath;
+                    }
+                }
+                
+            } else if(self.hasBlankItem) {
+                
+                self.hasBlankItem = NO;
+                [self deleteRowAt:self.blankItemIndexPath
+                       tableIndex:idx];
+            }
+            
+        } else {
+            
+            // TODO: it´s the same table - enable move
+        }
+    }];
+}
+
 - (void)repositionCellToOriginalLocation {
 
     [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -211,7 +293,9 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
     } completion:^(BOOL finished) {
         
         // update datasource and UI of selected table
-        [self insertRowAt:self.draggedCellData.selectedIndexPathInsideList withItem:self.draggedCellData.draggedItem];
+        [self insertRowAt:self.draggedCellData.selectedIndexPathInsideList
+               tableIndex:self.draggedCellData.selectedIndexOfList
+                     item:self.draggedCellData.draggedItem];
         
         //clear draggedCellData
         self.draggedCellData = nil;
@@ -221,50 +305,68 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
 
 #pragma mark - TableView UI and datasource updates
 
-- (void)deleteRowAt:(NSIndexPath *)indexPath {
+- (void)deleteRowAt:(NSIndexPath *)indexPath
+         tableIndex:(NSInteger)tableIndex {
     
-    UITableView *selectedTableView = [self getSelectedTableView];
-    id <DragNDropDelegate> delegate = [self getSelectedDelegate];
+    UITableView *tableView = [self getTableView:tableIndex];
+    id <DragNDropDelegate> delegate = [self getDelegate:tableIndex];
     
-    if([delegate respondsToSelector:@selector(didDragOutside:updatedDatasource:)]) {
+    if ([delegate respondsToSelector:@selector(didDragOutside:updatedDatasource:)]) {
     
-        NSMutableArray *updatedDataSource = [NSMutableArray arrayWithArray:[self getSelectedDataSource]];
+        NSMutableArray *updatedDataSource = [NSMutableArray arrayWithArray:[self getDataSource:tableIndex]];
 
         // remove from data source array and notify delegate of of new data source
         [updatedDataSource removeObjectAtIndex:indexPath.row];
-        [delegate didDragOutside:selectedTableView updatedDatasource:updatedDataSource];
+        
+        [delegate didDragOutside:tableView
+               updatedDatasource:updatedDataSource];
         
         // update local dataSourceArray
-        self.dataSourceArray[self.draggedCellData.selectedIndexOfList] = updatedDataSource;
+        self.dataSourceArray[tableIndex] = updatedDataSource;
         
-        [selectedTableView beginUpdates];
-        [selectedTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [selectedTableView endUpdates];
+        [tableView beginUpdates];
+        [tableView deleteRowsAtIndexPaths:@[indexPath]
+                                 withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tableView endUpdates];
     }
 }
 
 - (void)insertRowAt:(NSIndexPath *)indexPath
-           withItem:(id)item {
+         tableIndex:(NSInteger)tableIndex
+               item:(id)item {
 
-    UITableView *selectedTableView = [self getSelectedTableView];
-    id <DragNDropDelegate> delegate = [self getSelectedDelegate];
+    UITableView *tableView = [self getTableView:tableIndex];
+    id <DragNDropDelegate> delegate = [self getDelegate:tableIndex];
     
-    if([delegate respondsToSelector:@selector(didMoveCellToOriginalPosition:updatedDatasource:)]) {
-    
-        NSMutableArray *updatedDataSource = [NSMutableArray arrayWithArray:[self getSelectedDataSource]];
+    if ([delegate respondsToSelector:@selector(didInsertCellIn:updatedDatasource:)]) {
+        
+        NSMutableArray *updatedDataSource = [NSMutableArray arrayWithArray:[self getDataSource:tableIndex]];
         
         // insert item to updated datasource array and notify delegate of of new data source
-        [updatedDataSource insertObject:self.draggedCellData.draggedItem atIndex:indexPath.row];
+        [updatedDataSource insertObject:item
+                                atIndex:indexPath.row];
         
-        [delegate didMoveCellToOriginalPosition:selectedTableView updatedDatasource:updatedDataSource];
+        [delegate didInsertCellIn:tableView
+                              updatedDatasource:updatedDataSource];
         
         // update local dataSourceArray
-        self.dataSourceArray[self.draggedCellData.selectedIndexOfList] = updatedDataSource;
+        self.dataSourceArray[tableIndex] = updatedDataSource;
 
-        [selectedTableView beginUpdates];
-        [selectedTableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-        [selectedTableView endUpdates];
+        [tableView beginUpdates];
+        [tableView insertRowsAtIndexPaths:@[indexPath]
+                         withRowAnimation:UITableViewRowAnimationNone];
+        [tableView endUpdates];
     }
+}
+
+- (void)moveRowFromIndex:(NSIndexPath *)fromIndexPath
+                 toIndex:(NSIndexPath *)toIndexPath
+              tableIndex:(NSInteger)tableIndex {
+
+    UITableView *tableView = [self getTableView:tableIndex];
+    
+    [tableView moveRowAtIndexPath:fromIndexPath
+                      toIndexPath:toIndexPath];
 }
 
 @end

@@ -71,7 +71,7 @@
  numberOfRowsInSection:(NSInteger)section {
 
     if(tableView == self.tableLetters) {
-    
+        
         return self.tableLettersDataSource.count;
         
     } else {
@@ -97,7 +97,11 @@
                                            reuseIdentifier:@"CellLetters"];
         }
 
-        cell.textLabel.text = self.tableLettersDataSource[indexPath.row];
+        // TODO: how to force this validation in the side of the user ??
+        if (self.tableLettersDataSource[indexPath.row] != (id)[NSNull null]) {
+
+            cell.textLabel.text = self.tableLettersDataSource[indexPath.row];
+        }
         
     } else {
         
@@ -110,8 +114,11 @@
                                           reuseIdentifier:@"CellNumbers"];
         }
         
-        cell.textLabel.text = self.tableNumbersDataSource[indexPath.row];
-        
+        // TODO: how to force this validation in the side of the user ??
+        if (self.tableNumbersDataSource[indexPath.row] != (id)[NSNull null]) {
+            
+            cell.textLabel.text = self.tableNumbersDataSource[indexPath.row];
+        }   
     }
     
     return cell;
@@ -133,7 +140,7 @@
     }
 }
 
-- (void)didMoveCellToOriginalPosition:(UITableView *)tableView
+- (void)didInsertCellIn:(UITableView *)tableView
                     updatedDatasource:(NSMutableArray *)datasource {
 
     if(tableView == self.tableLetters) {
