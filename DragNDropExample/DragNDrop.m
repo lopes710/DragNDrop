@@ -9,6 +9,7 @@
 #import "DragNDrop.h"
 #import "DLDraggedCellData.h"
 #import "DLPlaceholderCellData.h"
+#import "NSMutableArray+Actions.h"
 
 typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellData);
 
@@ -392,10 +393,7 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
     // update datasource but notify the delegate just in the state end
     NSMutableArray *datasourceToUpdate = [NSMutableArray arrayWithArray:[self getDataSource:tableIndex]];
     
-    // TODO: Make it a category ??
-    id object = datasourceToUpdate[fromIndexPath.row];
-    [datasourceToUpdate removeObjectAtIndex:fromIndexPath.row];
-    [datasourceToUpdate insertObject:object atIndex:toIndexPath.row];
+    [datasourceToUpdate moveObjectAtIndex:fromIndexPath.row toIndex:toIndexPath.row];
     
     // update local dataSourceArray
     self.dataSourceArray[tableIndex] = datasourceToUpdate;
