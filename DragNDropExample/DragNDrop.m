@@ -8,6 +8,7 @@
 
 #import "DragNDrop.h"
 #import "DLDraggedCellData.h"
+#import "DLPlaceholderCellData.h"
 
 typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellData);
 
@@ -23,13 +24,9 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
 @property (nonatomic) CGPoint pointPositionOriginPressed;
 @property (nonatomic) CGPoint pointPositionInCell;
 
-// selected cell data
+// dragged cell data
 @property (nonatomic, strong) DLDraggedCellData *draggedCellData;
-
-// blankItem
-@property (nonatomic, assign) BOOL hasBlankItem;
-@property (nonatomic, strong) NSIndexPath *blankItemIndexPath;
-@property (nonatomic) NSInteger blankItemIndexOfList;
+@property (nonatomic, strong) DLPlaceholderCellData *placeHolderCellData;
 
 @end
 
@@ -115,21 +112,7 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
                sender.state == UIGestureRecognizerStateCancelled ||
                sender.state == UIGestureRecognizerStateFailed) {
         
-        // check if there is a draggedCell
-        if (self.draggedCellData.draggedCell) {
-            
-            if(self.hasBlankItem) {
-                
-                self.hasBlankItem = NO;
-                [self deleteRowAt:self.blankItemIndexPath
-                       tableIndex:self.blankItemIndexOfList];
-                
-            }
-            
-            //return cell to initial location
-            [self repositionCellToOriginalLocation];
-
-        }
+        [self checkIntersectionWhenStateEnded];
     }
 }
 
@@ -248,33 +231,37 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
                 
                 if(indexPath) {
                     
-                    if (!self.hasBlankItem) {
+                    if (!self.placeHolderCellData) {
+
+                        self.placeHolderCellData = [[DLPlaceholderCellData alloc] initWithSelectedIndexOfList:idx
+                                                                                  selectedIndexPathInsideList:indexPath
+                                                                                                         item:[NSNull null]];
                         
-                        //insert blank row
                         [self insertRowAt:indexPath
                                tableIndex:idx
                                      item:[NSNull null]];
                         
-                        self.hasBlankItem = YES;
-                        self.blankItemIndexPath = indexPath;
-                        self.blankItemIndexOfList = idx;
+                        // TODO: insert blank row TODO: make it an optionBlankCell or with value ??
+//                        [self insertRowAt:indexPath
+//                               tableIndex:idx
+//                                     item:self.draggedCellData.draggedItem];
                         
-                    } else {
+                    } else if ([self.placeHolderCellData.selectedIndexPathInsideList compare:indexPath] != NSOrderedSame) {
                         
                         //move blank row
-                        [self moveRowFromIndex:self.blankItemIndexPath
+                        [self moveRowFromIndex:self.placeHolderCellData.selectedIndexPathInsideList
                                        toIndex:indexPath
                                     tableIndex:idx];
                         
-                        self.blankItemIndexPath = indexPath;
+                        self.placeHolderCellData.selectedIndexPathInsideList = indexPath;
                     }
                 }
                 
-            } else if(self.hasBlankItem) {
+            } else if (self.placeHolderCellData) {
                 
-                self.hasBlankItem = NO;
-                [self deleteRowAt:self.blankItemIndexPath
+                [self deleteRowAt:self.placeHolderCellData.selectedIndexPathInsideList
                        tableIndex:idx];
+                self.placeHolderCellData = nil;
             }
             
         } else {
@@ -282,6 +269,43 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
             // TODO: it´s the same table - enable move
         }
     }];
+}
+
+- (void)checkIntersectionWhenStateEnded {
+    
+    // check if there is a draggedCell
+    if (self.draggedCellData.draggedCell) {
+        
+        if (self.placeHolderCellData) {
+            
+            NSInteger indexOfList = self.placeHolderCellData.selectedIndexOfList;
+            
+            UITableView *tableView = [self getTableView:indexOfList];
+            NSMutableArray *updatedDatasource = [NSMutableArray arrayWithArray:[self getDataSource:indexOfList]];
+            id <DragNDropDelegate> delegate = [self getDelegate:indexOfList];
+            
+            [updatedDatasource replaceObjectAtIndex:self.placeHolderCellData.selectedIndexPathInsideList.row
+                                          withObject:self.draggedCellData.draggedItem];
+            
+            [delegate didInsertCellIn:tableView
+                    updatedDatasource:updatedDatasource];
+            
+            // update local dataSourceArray
+            self.dataSourceArray[ self.placeHolderCellData.selectedIndexOfList] = updatedDatasource;
+            [tableView reloadData];
+
+            //clear draggedCellData
+            self.draggedCellData = nil;
+            
+            //clear placeHolderCellData
+            self.placeHolderCellData = nil;
+            
+        } else {
+            
+            //return cell to initial location
+            [self repositionCellToOriginalLocation];
+        }
+    }
 }
 
 - (void)repositionCellToOriginalLocation {
@@ -347,7 +371,7 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
                                 atIndex:indexPath.row];
         
         [delegate didInsertCellIn:tableView
-                              updatedDatasource:updatedDataSource];
+                updatedDatasource:updatedDataSource];
         
         // update local dataSourceArray
         self.dataSourceArray[tableIndex] = updatedDataSource;
@@ -364,6 +388,17 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
               tableIndex:(NSInteger)tableIndex {
 
     UITableView *tableView = [self getTableView:tableIndex];
+
+    // update datasource but notify the delegate just in the state end
+    NSMutableArray *datasourceToUpdate = [NSMutableArray arrayWithArray:[self getDataSource:tableIndex]];
+    
+    // TODO: Make it a category ??
+    id object = datasourceToUpdate[fromIndexPath.row];
+    [datasourceToUpdate removeObjectAtIndex:fromIndexPath.row];
+    [datasourceToUpdate insertObject:object atIndex:toIndexPath.row];
+    
+    // update local dataSourceArray
+    self.dataSourceArray[tableIndex] = datasourceToUpdate;
     
     [tableView moveRowAtIndexPath:fromIndexPath
                       toIndexPath:toIndexPath];

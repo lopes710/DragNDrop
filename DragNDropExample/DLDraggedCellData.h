@@ -10,7 +10,10 @@
 
 @interface DLDraggedCellData : NSObject
 
-- (instancetype)initWithCell:(UIImageView *)imageCell selectedIndexOfList:(NSInteger)index selectedIndexPathInsideList:(NSIndexPath *)indexPath item:(id)item;
+- (instancetype)initWithCell:(UIImageView *)imageCell
+         selectedIndexOfList:(NSInteger)index
+ selectedIndexPathInsideList:(NSIndexPath *)indexPath
+                        item:(id)item;
 
 @property (nonatomic, strong, readonly) UIImageView *draggedCell;
 @property (nonatomic, assign, readonly) NSInteger selectedIndexOfList;

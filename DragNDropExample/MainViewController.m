@@ -85,10 +85,11 @@
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     UITableViewCell *cell;
-
+    
     if(tableView == self.tableLetters) {
         
         cell = [self.tableLetters dequeueReusableCellWithIdentifier:@"CellLetters"];
+        
         
         if (cell == nil) {
             
@@ -98,7 +99,12 @@
         }
 
         // TODO: how to force this validation in the side of the user ??
-        if (self.tableLettersDataSource[indexPath.row] != (id)[NSNull null]) {
+        if (self.tableLettersDataSource[indexPath.row] == (id)[NSNull null]) {
+            
+            // TODO: reset CELL how to for this in the user side ??
+            cell.textLabel.text = @"";
+            
+        } else {
 
             cell.textLabel.text = self.tableLettersDataSource[indexPath.row];
         }
@@ -115,10 +121,15 @@
         }
         
         // TODO: how to force this validation in the side of the user ??
-        if (self.tableNumbersDataSource[indexPath.row] != (id)[NSNull null]) {
+        if (self.tableNumbersDataSource[indexPath.row] == (id)[NSNull null]) {
+            
+            // TODO: reset CELL how to for this in the user side ??
+            cell.textLabel.text = @"";
+            
+        } else {
             
             cell.textLabel.text = self.tableNumbersDataSource[indexPath.row];
-        }   
+        }
     }
     
     return cell;
@@ -141,7 +152,7 @@
 }
 
 - (void)didInsertCellIn:(UITableView *)tableView
-                    updatedDatasource:(NSMutableArray *)datasource {
+      updatedDatasource:(NSMutableArray *)datasource {
 
     if(tableView == self.tableLetters) {
         
