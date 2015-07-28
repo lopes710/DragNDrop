@@ -63,14 +63,18 @@
     self.tableNumbers.dataSource = self;
     self.tableNumbers.delegate = self;
     
-//    [[DragNDrop sharedManager] addTable:self.tableLetters dataSource:self.tableLettersDataSource delegate:self];
-//    [[DragNDrop sharedManager] addTable:self.tableNumbers dataSource:self.tableNumbersDataSource delegate:self];
+    [[DragNDrop sharedManager] addTable:self.tableLetters
+                             dataSource:self.tableLettersDataSource
+                               delegate:self
+                     canMoveInsideTable:YES];
     
-    [[DragNDrop sharedManager] addTable:self.tableLetters dataSource:self.tableLettersDataSource delegate:self canMoveInsideTable:YES];
-     [[DragNDrop sharedManager] addTable:self.tableNumbers dataSource:self.tableNumbersDataSource delegate:self canMoveInsideTable:NO];
+    [[DragNDrop sharedManager] addTable:self.tableNumbers
+                             dataSource:self.tableNumbersDataSource
+                               delegate:self
+                     canMoveInsideTable:NO];
     
-//    [DragNDrop sharedManager].configuration.animationDurationInSeconds = 1.0;
-//    [DragNDrop sharedManager].configuration.canMoveCellWithinTable = NO;
+    //    [DragNDrop sharedManager].configuration.animationDurationInSeconds = 1.0;
+    //    [DragNDrop sharedManager].configuration.canMoveCellWithinTable = NO;
     
 }
 

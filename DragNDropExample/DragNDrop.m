@@ -32,6 +32,15 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
 
 @end
 
+
+/* TODOs:
+
+ 1) Add a flag inDrag to not select another cell while animating
+ 2) Make placeholder empty or with data ?
+ 3) Add system to know what tables are able to intersect anothers
+ 
+ */
+
 @implementation DragNDrop
 
 #pragma mark - Lifecycle
@@ -44,6 +53,12 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
         
         _tableDataArray = [NSMutableArray array];
         _configuration = [[DLConfiguration alloc] init];
+        
+        // set observer in case of orientation change. In this case the dragNDrop is canceled
+        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:)
+                                                     name:UIDeviceOrientationDidChangeNotification
+                                                   object:[UIDevice currentDevice]];
     }
     
     return self;
@@ -84,7 +99,7 @@ canMoveInsideTable:(BOOL)canMoveInsideTable {
 
 - (IBAction)longPress:(UILongPressGestureRecognizer *)sender {
     
-    // TODO: use boolean to validade if if it can longPress again _inDrag
+    // TODO: use boolean to validade if if it can longPress again _inDrag ??
     
     UIView *windowView = [self getWindowView];
     CGPoint pointPositionPressed = [sender locationInView:windowView];
@@ -224,7 +239,7 @@ canMoveInsideTable:(BOOL)canMoveInsideTable {
 
     UIView *windowView = [self getWindowView];
     
-    //  check intersections
+    // check intersections
     [self.tableDataArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         
         DLTableData *tableData = (DLTableData *)obj;
@@ -456,6 +471,28 @@ canMoveInsideTable:(BOOL)canMoveInsideTable {
     
     [tableView moveRowAtIndexPath:fromIndexPath
                       toIndexPath:toIndexPath];
+}
+
+#pragma mark - Device orientation notifications
+
+- (void)orientationChanged:(NSNotification *)note {
+
+    // Cancel dradNDrop on orientation change
+    if (self.draggedCellData.draggedCell) {
+        
+        [self insertRowAt:self.draggedCellData.selectedIndexPathInsideList
+               tableIndex:self.draggedCellData.selectedIndexOfList
+                     item:self.draggedCellData.draggedItem];
+        [self clearDraggedCell];
+        
+        if (self.placeHolderCellData) {
+            
+            [self deleteRowAt:self.placeHolderCellData.selectedIndexPathInsideList
+                   tableIndex:self.placeHolderCellData.selectedIndexOfList];
+            
+            [self clearPlaceholderCell];
+        }
+    }
 }
 
 @end
