@@ -36,8 +36,9 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
 /* TODOs:
 
  1) Add a flag inDrag to not select another cell while animating
- 2) Make placeholder empty or with data ?
+ 2) optional: Make placeholder empty or with data ?
  3) Add system to know what tables are able to intersect anothers
+ 4) optional: configuration of draggedCell ?
  
  */
 
