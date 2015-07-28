@@ -138,7 +138,7 @@ canMoveInsideTable:(BOOL)canMoveInsideTable {
     }
 }
 
-#pragma mark - Private methods
+#pragma mark - Private methods: helpers
 
 - (UIView *)getWindowView {
 
@@ -167,6 +167,28 @@ canMoveInsideTable:(BOOL)canMoveInsideTable {
     
     return tableData.delegate;
 }
+
+- (UIImage *)createImageFromCell:(UITableViewCell *)cell {
+    
+    UIGraphicsBeginImageContext(cell.bounds.size);
+    [cell.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *imageCell = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return imageCell;
+}
+
+- (void)clearDraggedCell {
+    
+    self.draggedCellData = nil;
+}
+
+- (void)clearPlaceholderCell {
+    
+    self.placeHolderCellData = nil;
+}
+
+#pragma mark - Private methods: Cell calculations
 
 - (void)getCellOnLongPress:(UILongPressGestureRecognizer *)sender
           pointPositionPressed:(CGPoint)pointPositionPressed
@@ -372,28 +394,6 @@ canMoveInsideTable:(BOOL)canMoveInsideTable {
         
         [self clearPlaceholderCell];
     }];
-}
-
-#pragma mark - Private methods: helpers
-
-- (UIImage *)createImageFromCell:(UITableViewCell *)cell {
-
-    UIGraphicsBeginImageContext(cell.bounds.size);
-    [cell.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *imageCell = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return imageCell;
-}
-
-- (void)clearDraggedCell {
-
-    self.draggedCellData = nil;
-}
-
-- (void)clearPlaceholderCell {
-    
-    self.placeHolderCellData = nil;
 }
 
 #pragma mark - TableView UI and datasource updates
