@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DLConfiguration.h"
 
 @protocol DragNDropDelegate <NSObject>
 
@@ -18,8 +19,9 @@
 
 @interface DragNDrop : NSObject <UITableViewDelegate>
 
-+ (id)sharedManager;
+@property (nonatomic, strong, readonly) DLConfiguration *configuration;
 
-- (void)addTable:(UITableView *)tableView dataSource:(NSArray *)datasource delegate:(id)delegate;
++ (instancetype)sharedManager;
 
+- (void)addTable:(UITableView *)tableView dataSource:(NSArray *)datasource delegate:(id)delegate canMoveInsideTable:(BOOL)canMoveInsideTable;
 @end
