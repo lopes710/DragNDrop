@@ -8,15 +8,12 @@
 
 #import "DLTableData.h"
 
-//@property (nonatomic, strong) NSMutableArray *tablesArray;
-//@property (nonatomic, strong) NSMutableArray *dataSourceArray;
-//@property (nonatomic, strong) NSMutableArray *delegatesArray;
-
 @interface DLTableData ()
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) id <DragNDropDelegate> delegate;
 @property (nonatomic, strong) NSString *tableName;
+@property (nonatomic, strong) NSArray *intersectTables;
 
 @end
 
@@ -27,8 +24,8 @@
 - (instancetype)initTable:(UITableView *)tableView
                dataSource:(NSArray *)datasource
                  delegate:(id)delegate
-       canMoveInsideTable:(BOOL)canMoveInsideTable
-                tableName:(NSString *)tableName {
+                tableName:(NSString *)tableName
+       canIntersectTables:(NSArray *)intersectTables {
     
     self = [super init];
     
@@ -37,8 +34,8 @@
         _tableView = tableView;
         _datasource = [NSMutableArray arrayWithArray:datasource];
         _delegate = delegate;
-        _canMoveInsideTable = canMoveInsideTable;
         _tableName = tableName;
+        _intersectTables = intersectTables;
     }
     
     return self;

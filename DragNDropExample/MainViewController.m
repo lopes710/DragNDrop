@@ -88,21 +88,28 @@
     [[DragNDrop sharedManager] addTable:self.tableLetters
                              dataSource:self.tableLettersDataSource
                                delegate:self
-                     canMoveInsideTable:YES
-                              tableName:@"tableLetters"];
+                              tableName:@"tableLetters"
+                     canIntersectTables:@[
+                                          @"tableLetters",
+                                          @"tableNumbers",
+                                          @"tableCharacters"
+                                        ]];
     
     [[DragNDrop sharedManager] addTable:self.tableNumbers
                              dataSource:self.tableNumbersDataSource
                                delegate:self
-                     canMoveInsideTable:NO
-                              tableName:@"tableNumbers"];
+                              tableName:@"tableNumbers"
+                     canIntersectTables:@[]];
     
     [[DragNDrop sharedManager] addTable:self.tableCharacters
                              dataSource:self.tableCharactersDataSource
                                delegate:self
-                     canMoveInsideTable:YES
-                              tableName:@"tableCharacters"];
-
+                              tableName:@"tableCharacters"
+                     canIntersectTables:@[
+                                          @"tableLetters",
+                                          @"tableCharacters"
+                                          ]];
+    
     
     self.tableLetters.layer.borderColor = [UIColor redColor].CGColor;
     self.tableLetters.layer.borderWidth = 2.0;

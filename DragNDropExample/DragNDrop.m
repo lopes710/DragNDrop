@@ -37,7 +37,7 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
 
  1) Add a flag inDrag to not select another cell while animating
  2) optional: Make placeholder empty or with data ?
- 3) Add system to know what tables are able to intersect anothers
+ 3) Add system to know what tables are able to intersect anothers   -   done
  4) optional: configuration of draggedCell ?
  5) scroll when drag in top or bottom
  
@@ -82,8 +82,8 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
 - (void)addTable:(UITableView *)tableView
       dataSource:(NSArray *)datasource
         delegate:(id)delegate
-canMoveInsideTable:(BOOL)canMoveInsideTable
-       tableName:(NSString *)tableName {
+       tableName:(NSString *)tableName
+canIntersectTables:(NSArray *)intersectTables {
     
     // check if table is already added
     for (DLTableData *tableData in self.tableDataArray) {
@@ -98,15 +98,18 @@ canMoveInsideTable:(BOOL)canMoveInsideTable
     DLTableData *tableData = [[DLTableData alloc] initTable:tableView
                                                  dataSource:datasource
                                                    delegate:delegate
-                                         canMoveInsideTable:canMoveInsideTable
-                                                  tableName:tableName];
+                                                  tableName:tableName
+                                         canIntersectTables:intersectTables];
     
     [self.tableDataArray addObject:tableData];
     
-    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self
-                                                                                            action:@selector(longPress:)];
-    longPress.minimumPressDuration = 0.2f;
-    [tableView addGestureRecognizer:longPress];
+    if (intersectTables.count > 0) {
+        
+        UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                                                                action:@selector(longPress:)];
+        longPress.minimumPressDuration = 0.2f;
+        [tableView addGestureRecognizer:longPress];
+    }
 }
 
 #pragma mark - GestureRecognizer methods
@@ -271,7 +274,8 @@ canMoveInsideTable:(BOOL)canMoveInsideTable
     self.draggedCellData.draggedCell.frame = CGRectMake(newPointPositionPressed.x, newPointPositionPressed.y, self.draggedCellData.draggedCell.frame.size.width, self.draggedCellData.draggedCell.frame.size.height);
 }
 
-- (void)checkIntersectionWhileStateChanged:(UILongPressGestureRecognizer *)sender pointPress:(CGPoint)pointPositionPressed {
+- (void)checkIntersectionWhileStateChanged:(UILongPressGestureRecognizer *)sender
+                                pointPress:(CGPoint)pointPositionPressed {
 
     UIView *windowView = [self getWindowView];
     
@@ -280,21 +284,26 @@ canMoveInsideTable:(BOOL)canMoveInsideTable
         
         DLTableData *tableData = (DLTableData *)obj;
         UITableView *tableView = tableData.tableView;
+
+        // before checking intersection validate if it can intersect with this table
+        DLTableData *tableDataOrigin = self.tableDataArray[self.draggedCellData.selectedIndexOfList];
         
-        // validate if it can move inside table
-        if (!tableData.canMoveInsideTable && tableView == [self getTableView:self.draggedCellData.selectedIndexOfList]) {
+        // if intersectTables doesn´t contain the tableName don´t intersect
+        if (![tableDataOrigin.intersectTables containsObject:tableData.tableName]) {
             
             return;
         }
-        
-        CGRect selectedTableViewRect = [windowView convertRect:tableView.frame fromView:tableView.superview];
+
+        CGRect selectedTableViewRect = [windowView convertRect:tableView.frame
+                                                      fromView:tableView.superview];
         
         // check if the point pressed is inside a tableView
         if (CGRectContainsPoint(selectedTableViewRect, pointPositionPressed)) {
 
             // check if entered in a new tableView directly from another
             // if it does it should delete the previous placeholder cell
-            if(self.placeHolderCellData && idx != self.placeHolderCellData.selectedIndexOfList) {
+            if(self.placeHolderCellData
+               && idx != self.placeHolderCellData.selectedIndexOfList) {
                 
                 [self deleteRowAt:self.placeHolderCellData.selectedIndexPathInsideList
                        tableIndex:self.placeHolderCellData.selectedIndexOfList];
@@ -335,7 +344,8 @@ canMoveInsideTable:(BOOL)canMoveInsideTable
             }
             *stop = YES;
             
-        } else if (self.placeHolderCellData && self.placeHolderCellData.selectedIndexOfList == idx) {
+        } else if (self.placeHolderCellData
+                   && self.placeHolderCellData.selectedIndexOfList == idx) {
 
             [self deleteRowAt:self.placeHolderCellData.selectedIndexPathInsideList
                    tableIndex:idx];
