@@ -23,5 +23,5 @@
 
 + (instancetype)sharedManager;
 
-- (void)addTable:(UITableView *)tableView dataSource:(NSArray *)datasource delegate:(id)delegate canMoveInsideTable:(BOOL)canMoveInsideTable;
+- (void)addTable:(UITableView *)tableView dataSource:(NSArray *)datasource delegate:(id)delegate canMoveInsideTable:(BOOL)canMoveInsideTable tableName:(NSString *)tableName;
 @end

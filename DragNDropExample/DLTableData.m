@@ -16,6 +16,7 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) id <DragNDropDelegate> delegate;
+@property (nonatomic, strong) NSString *tableName;
 
 @end
 
@@ -26,7 +27,8 @@
 - (instancetype)initTable:(UITableView *)tableView
                dataSource:(NSArray *)datasource
                  delegate:(id)delegate
-       canMoveInsideTable:(BOOL)canMoveInsideTable {
+       canMoveInsideTable:(BOOL)canMoveInsideTable
+                tableName:(NSString *)tableName {
     
     self = [super init];
     
@@ -36,7 +38,7 @@
         _datasource = [NSMutableArray arrayWithArray:datasource];
         _delegate = delegate;
         _canMoveInsideTable = canMoveInsideTable;
-
+        _tableName = tableName;
     }
     
     return self;

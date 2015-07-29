@@ -16,6 +16,6 @@
 @property (nonatomic, strong, readonly) id <DragNDropDelegate> delegate;
 @property (nonatomic, assign, readonly) BOOL canMoveInsideTable;
 
-- (instancetype)initTable:(UITableView *)tableView dataSource:(NSArray *)datasource delegate:(id)delegate canMoveInsideTable:(BOOL)canMoveInsideTable;
+- (instancetype)initTable:(UITableView *)tableView dataSource:(NSArray *)datasource delegate:(id)delegate canMoveInsideTable:(BOOL)canMoveInsideTable tableName:(NSString *)tableName;
 
 @end

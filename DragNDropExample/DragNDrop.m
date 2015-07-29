@@ -39,6 +39,7 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
  2) optional: Make placeholder empty or with data ?
  3) Add system to know what tables are able to intersect anothers
  4) optional: configuration of draggedCell ?
+ 5) scroll when drag in top or bottom
  
  */
 
@@ -81,12 +82,24 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
 - (void)addTable:(UITableView *)tableView
       dataSource:(NSArray *)datasource
         delegate:(id)delegate
-canMoveInsideTable:(BOOL)canMoveInsideTable {
+canMoveInsideTable:(BOOL)canMoveInsideTable
+       tableName:(NSString *)tableName {
+    
+    // check if table is already added
+    for (DLTableData *tableData in self.tableDataArray) {
+        
+        if (tableData.tableView == tableView) {
+            
+            NSLog(@"DragNDrop: tableView was already added.");
+            return;
+        }
+    }
     
     DLTableData *tableData = [[DLTableData alloc] initTable:tableView
-                                         dataSource:datasource
-                                           delegate:delegate
-                                 canMoveInsideTable:canMoveInsideTable];
+                                                 dataSource:datasource
+                                                   delegate:delegate
+                                         canMoveInsideTable:canMoveInsideTable
+                                                  tableName:tableName];
     
     [self.tableDataArray addObject:tableData];
     
@@ -278,7 +291,17 @@ canMoveInsideTable:(BOOL)canMoveInsideTable {
         
         // check if the point pressed is inside a tableView
         if (CGRectContainsPoint(selectedTableViewRect, pointPositionPressed)) {
-            
+
+            // check if entered in a new tableView directly from another
+            // if it does it should delete the previous placeholder cell
+            if(self.placeHolderCellData && idx != self.placeHolderCellData.selectedIndexOfList) {
+                
+                [self deleteRowAt:self.placeHolderCellData.selectedIndexPathInsideList
+                       tableIndex:self.placeHolderCellData.selectedIndexOfList];
+                
+                [self clearPlaceholderCell];
+            }
+
             // get point in tableView where dragged cell is on top to find the indexPath
             CGPoint pointPositionInTableView = [sender locationInView:tableView];
             NSIndexPath *indexPath = [tableView indexPathForRowAtPoint:pointPositionInTableView];
@@ -313,7 +336,7 @@ canMoveInsideTable:(BOOL)canMoveInsideTable {
             *stop = YES;
             
         } else if (self.placeHolderCellData && self.placeHolderCellData.selectedIndexOfList == idx) {
-            
+
             [self deleteRowAt:self.placeHolderCellData.selectedIndexPathInsideList
                    tableIndex:idx];
             
