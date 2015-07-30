@@ -422,17 +422,13 @@ canIntersectTables:(NSArray *)intersectTables {
                 }
             }
             
-
-            
             // Check if cell is near the bottom of table to scroll
             CGRect cellFrame = [tableView rectForRowAtIndexPath:indexPath];
             if (pointPositionPressed.y > (selectedTableViewRect.origin.y + selectedTableViewRect.size.height - cellFrame.size.height) ) {
-                
-                
-                
+
                 if (!self.timer) {
                     
-                    self.timer = [NSTimer scheduledTimerWithTimeInterval:0.03
+                    self.timer = [NSTimer scheduledTimerWithTimeInterval:self.configuration.scrollDurationInSeconds
                                                                   target:self
                                                                 selector:@selector(scrollDown:)
                                                                 userInfo:@{
@@ -444,14 +440,12 @@ canIntersectTables:(NSArray *)intersectTables {
                 }
                 
             } else if (pointPositionPressed.y < (selectedTableViewRect.origin.y + cellFrame.size.height)) {
-                
-                
-                
+
                 if (!self.timer) {
 
                     if (tableView.contentOffset.y != 0) {
                         
-                        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.03
+                        self.timer = [NSTimer scheduledTimerWithTimeInterval:self.configuration.scrollDurationInSeconds
                                                                       target:self
                                                                     selector:@selector(scrollUp:)
                                                                     userInfo:@{
@@ -505,7 +499,10 @@ canIntersectTables:(NSArray *)intersectTables {
 
 - (void)repositionCellToOriginalLocation {
     
-    [UIView animateWithDuration:self.configuration.animationDurationInSeconds delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:self.configuration.repositionDurationInSeconds
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
         
         self.draggedCellData.draggedCell.frame = CGRectMake(self.pointPositionOriginPressed.x, self.pointPositionOriginPressed.y, self.draggedCellData.draggedCell.frame.size.width, self.draggedCellData.draggedCell.frame.size.height);
         
@@ -533,7 +530,10 @@ canIntersectTables:(NSArray *)intersectTables {
     CGRect cellViewRect = [[self getWindowView] convertRect:cell.frame fromView:cell.superview];
     
     // animation
-    [UIView animateWithDuration:self.configuration.animationDurationInSeconds delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:self.configuration.repositionDurationInSeconds
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
 
         self.draggedCellData.draggedCell.frame = CGRectMake(cellViewRect.origin.x, cellViewRect.origin.y, cellViewRect.size.width, cellViewRect.size.height);
         

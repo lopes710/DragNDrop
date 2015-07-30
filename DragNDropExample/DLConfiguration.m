@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "DLConfiguration.h"
 
-static CGFloat const kAnimationDuration = 0.5;
+static CGFloat const kRepositionDuration = 0.5;
+static CGFloat const kScrollDuration = 0.03;
 
 @interface DLConfiguration ()
 
@@ -23,7 +24,8 @@ static CGFloat const kAnimationDuration = 0.5;
     
     if (self) {
     
-        _animationDurationInSeconds = kAnimationDuration;
+        _repositionDurationInSeconds = kRepositionDuration;
+        _scrollDurationInSeconds     = kScrollDuration;
     }
     
     return self;
@@ -34,11 +36,11 @@ static CGFloat const kAnimationDuration = 0.5;
     // should I put a maximum here ??
     if (animationDurationInSeconds <= 2.0) {
     
-        _animationDurationInSeconds = animationDurationInSeconds;
+        _repositionDurationInSeconds = animationDurationInSeconds;
         
     } else {
     
-        _animationDurationInSeconds = kAnimationDuration;
+        _repositionDurationInSeconds = kRepositionDuration;
         
     }
 }

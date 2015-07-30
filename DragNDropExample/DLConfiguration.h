@@ -8,6 +8,7 @@
 
 @interface DLConfiguration : NSObject
 
-@property (nonatomic, assign) CGFloat animationDurationInSeconds;
+@property (nonatomic, assign) CGFloat repositionDurationInSeconds;
+@property (nonatomic, assign) CGFloat scrollDurationInSeconds;
 
 @end
