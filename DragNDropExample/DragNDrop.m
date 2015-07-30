@@ -12,6 +12,8 @@
 #import "NSMutableArray+Actions.h"
 #import "DLTableData.h"
 
+#define kDLScrollSpeed      10.f
+
 typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellData);
 
 @interface DragNDrop ()
@@ -30,16 +32,20 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
 
 //@property (nonatomic, assign) BOOL inDrag;
 
+// timer used to scroll down or up
+@property (nonatomic, strong) NSTimer *timer;
+
 @end
 
 
 /* TODOs:
 
- 1) Add a flag inDrag to not select another cell while animating
- 2) optional: Make placeholder empty or with data ?
- 3) Add system to know what tables are able to intersect anothers   -   done
- 4) optional: configuration of draggedCell ?
- 5) scroll when drag in top or bottom
+ 1) Add a flag inDrag to not select another cell while animating                    -
+ 2) optional: Make placeholder empty or with data ?                                 -
+ 3) Add system to know what tables are able to intersect anothers                   -   done
+ 4) optional: configuration of draggedCell ?                                        -
+ 5) scroll when drag in top or bottom                                               -   done
+ 6) optional: allow to delete cell instead of get reposition to original location   -
  
  */
 
@@ -151,6 +157,8 @@ canIntersectTables:(NSArray *)intersectTables {
                sender.state == UIGestureRecognizerStateCancelled ||
                sender.state == UIGestureRecognizerStateFailed)) {
         
+        [self resetTimer];
+        
         [self checkIntersectionWhenStateEnded:sender];
     }
 }
@@ -203,6 +211,77 @@ canIntersectTables:(NSArray *)intersectTables {
 - (void)clearPlaceholderCell {
     
     self.placeHolderCellData = nil;
+}
+
+- (void)scrollDown:(NSTimer *)sender {
+    
+    NSDictionary *userDictionary = (NSDictionary *)sender.userInfo;
+    
+    UITableView *tableView = userDictionary[@"tableView"];
+    UILongPressGestureRecognizer *longGesture = userDictionary[@"sender"];
+    CGPoint pointPositionPressed = [userDictionary[@"pointPositionPressed"] CGPointValue];
+    
+    CGFloat tableViewHeight = tableView.contentSize.height - tableView.frame.size.height;
+    
+    if (tableView.contentOffset.y < tableViewHeight) {
+        
+        CGPoint currentOff = tableView.contentOffset;
+        currentOff.y += kDLScrollSpeed;
+        
+        if (currentOff.y > tableViewHeight) {
+        
+            currentOff.y = tableViewHeight;
+        }
+        
+        [tableView setContentOffset:currentOff animated:NO];
+        
+        
+        [self checkIntersectionWhileStateChanged:longGesture
+                                      pointPress:pointPositionPressed];
+        
+    } else {
+        
+        [self resetTimer];
+    }
+}
+
+- (void)scrollUp:(NSTimer *)sender {
+
+    NSDictionary *userDictionary = (NSDictionary *)sender.userInfo;
+    
+    UITableView *tableView = userDictionary[@"tableView"];
+    UILongPressGestureRecognizer *longGesture = userDictionary[@"sender"];
+    CGPoint pointPositionPressed = [userDictionary[@"pointPositionPressed"] CGPointValue];
+
+    if (tableView.contentOffset.y > 0.f) {
+        
+        CGPoint currentOff = tableView.contentOffset;
+        currentOff.y -= kDLScrollSpeed;
+        
+        if (currentOff.y < 0) {
+            
+            currentOff.y = 0;
+        }
+        
+        [tableView setContentOffset:currentOff animated:NO];
+ 
+        [self checkIntersectionWhileStateChanged:longGesture
+                                      pointPress:pointPositionPressed];
+        
+    } else {
+        
+        
+        [self resetTimer];
+    }
+}
+
+- (void)resetTimer {
+    
+    if (self.timer) {
+
+        [self.timer invalidate];
+        self.timer = nil;
+    }
 }
 
 #pragma mark - Private methods: Cell calculations
@@ -334,7 +413,7 @@ canIntersectTables:(NSArray *)intersectTables {
                     
                 } else if ([self.placeHolderCellData.selectedIndexPathInsideList compare:indexPath] != NSOrderedSame) {
                     
-                    //move blank row
+                    //move placeholder row
                     [self moveRowFromIndex:self.placeHolderCellData.selectedIndexPathInsideList
                                    toIndex:indexPath
                                 tableIndex:idx];
@@ -342,6 +421,53 @@ canIntersectTables:(NSArray *)intersectTables {
                     self.placeHolderCellData.selectedIndexPathInsideList = indexPath;
                 }
             }
+            
+
+            
+            // Check if cell is near the bottom of table to scroll
+            CGRect cellFrame = [tableView rectForRowAtIndexPath:indexPath];
+            if (pointPositionPressed.y > (selectedTableViewRect.origin.y + selectedTableViewRect.size.height - cellFrame.size.height) ) {
+                
+                
+                
+                if (!self.timer) {
+                    
+                    self.timer = [NSTimer scheduledTimerWithTimeInterval:0.03
+                                                                  target:self
+                                                                selector:@selector(scrollDown:)
+                                                                userInfo:@{
+                                                                           @"tableView"           : tableView,
+                                                                           @"sender"              : sender,
+                                                                           @"pointPositionPressed": [NSValue valueWithCGPoint:pointPositionPressed]
+                                                                           }
+                                                                 repeats:YES];
+                }
+                
+            } else if (pointPositionPressed.y < (selectedTableViewRect.origin.y + cellFrame.size.height)) {
+                
+                
+                
+                if (!self.timer) {
+
+                    if (tableView.contentOffset.y != 0) {
+                        
+                        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.03
+                                                                      target:self
+                                                                    selector:@selector(scrollUp:)
+                                                                    userInfo:@{
+                                                                               @"tableView"           : tableView,
+                                                                               @"sender"              : sender,
+                                                                               @"pointPositionPressed": [NSValue valueWithCGPoint:pointPositionPressed]
+                                                                               }
+                                                                     repeats:YES];
+                    }
+                }
+            
+            } else {
+               
+                [self resetTimer];
+            }
+            
             *stop = YES;
             
         } else if (self.placeHolderCellData
@@ -351,6 +477,8 @@ canIntersectTables:(NSArray *)intersectTables {
                    tableIndex:idx];
             
             [self clearPlaceholderCell];
+            
+            [self resetTimer];
             
             *stop = YES;
         }
@@ -411,22 +539,25 @@ canIntersectTables:(NSArray *)intersectTables {
         
     } completion:^(BOOL finished) {
         
-        // update datasource and UI of selected table
-        [updatedDatasource replaceObjectAtIndex:self.placeHolderCellData.selectedIndexPathInsideList.row
-                                     withObject:self.draggedCellData.draggedItem];
-        
-        [delegate didInsertCellIn:tableView
-                updatedDatasource:updatedDatasource];
-        
-        // update local dataSourceArray
-        DLTableData *tableData = self.tableDataArray[self.placeHolderCellData.selectedIndexOfList];
-        tableData.datasource = updatedDatasource;
-        
-        [tableView reloadData];
-        
-        [self clearDraggedCell];
-        
-        [self clearPlaceholderCell];
+        if ([delegate respondsToSelector:@selector(didUpdateDatasource:tableView:)]) {
+            
+            // update datasource and UI of selected table
+            [updatedDatasource replaceObjectAtIndex:self.placeHolderCellData.selectedIndexPathInsideList.row
+                                         withObject:self.draggedCellData.draggedItem];
+
+            [delegate didUpdateDatasource:updatedDatasource
+                                tableView:tableView];
+            
+            // update local dataSourceArray
+            DLTableData *tableData = self.tableDataArray[self.placeHolderCellData.selectedIndexOfList];
+            tableData.datasource = updatedDatasource;
+            
+            [tableView reloadData];
+            
+            [self clearDraggedCell];
+            
+            [self clearPlaceholderCell];
+        }
     }];
 }
 
@@ -438,19 +569,22 @@ canIntersectTables:(NSArray *)intersectTables {
     UITableView *tableView = [self getTableView:tableIndex];
     id <DragNDropDelegate> delegate = [self getDelegate:tableIndex];
     
-    if ([delegate respondsToSelector:@selector(didDragOutside:updatedDatasource:)]) {
+    if ([delegate respondsToSelector:@selector(didUpdateDatasource:tableView:)]) {
     
-        NSMutableArray *updatedDataSource = [NSMutableArray arrayWithArray:[self getDataSource:tableIndex]];
+        NSMutableArray *updatedDatasource = [NSMutableArray arrayWithArray:[self getDataSource:tableIndex]];
 
-        // remove from data source array and notify delegate of of new data source
-        [updatedDataSource removeObjectAtIndex:indexPath.row];
-        
-        [delegate didDragOutside:tableView
-               updatedDatasource:updatedDataSource];
+        // remove from data source array and notify delegate of new data source
+        if (indexPath.row < updatedDatasource.count) {
+            
+            [updatedDatasource removeObjectAtIndex:indexPath.row];
+        }
+
+        [delegate didUpdateDatasource:updatedDatasource
+                            tableView:tableView];
         
         // update local dataSourceArray
         DLTableData *tableData = self.tableDataArray[tableIndex];
-        tableData.datasource = updatedDataSource;
+        tableData.datasource = updatedDatasource;
         
         [tableView beginUpdates];
         [tableView deleteRowsAtIndexPaths:@[indexPath]
@@ -466,20 +600,20 @@ canIntersectTables:(NSArray *)intersectTables {
     UITableView *tableView = [self getTableView:tableIndex];
     id <DragNDropDelegate> delegate = [self getDelegate:tableIndex];
     
-    if ([delegate respondsToSelector:@selector(didInsertCellIn:updatedDatasource:)]) {
+    if ([delegate respondsToSelector:@selector(didUpdateDatasource:tableView:)]) {
         
-        NSMutableArray *updatedDataSource = [NSMutableArray arrayWithArray:[self getDataSource:tableIndex]];
+        NSMutableArray *updatedDatasource = [NSMutableArray arrayWithArray:[self getDataSource:tableIndex]];
         
         // insert item to updated datasource array and notify delegate of of new data source
-        [updatedDataSource insertObject:item
+        [updatedDatasource insertObject:item
                                 atIndex:indexPath.row];
-        
-        [delegate didInsertCellIn:tableView
-                updatedDatasource:updatedDataSource];
+
+        [delegate didUpdateDatasource:updatedDatasource
+                            tableView:tableView];
         
         // update local dataSourceArray
         DLTableData *tableData = self.tableDataArray[tableIndex];
-        tableData.datasource = updatedDataSource;
+        tableData.datasource = updatedDatasource;
 
         [tableView beginUpdates];
         [tableView insertRowsAtIndexPaths:@[indexPath]
@@ -491,20 +625,26 @@ canIntersectTables:(NSArray *)intersectTables {
 - (void)moveRowFromIndex:(NSIndexPath *)fromIndexPath
                  toIndex:(NSIndexPath *)toIndexPath
               tableIndex:(NSInteger)tableIndex {
-
+    
     UITableView *tableView = [self getTableView:tableIndex];
-
-    // update datasource but notify the delegate just in the state end
-    NSMutableArray *datasourceToUpdate = [NSMutableArray arrayWithArray:[self getDataSource:tableIndex]];
+    id <DragNDropDelegate> delegate = [self getDelegate:tableIndex];
     
-    [datasourceToUpdate moveObjectAtIndex:fromIndexPath.row toIndex:toIndexPath.row];
-    
-    // update local dataSourceArray
-    DLTableData *tableData = self.tableDataArray[tableIndex];
-    tableData.datasource = datasourceToUpdate;
-    
-    [tableView moveRowAtIndexPath:fromIndexPath
-                      toIndexPath:toIndexPath];
+    if ([delegate respondsToSelector:@selector(didUpdateDatasource:tableView:)]) {
+        
+        NSMutableArray *updatedDatasource = [NSMutableArray arrayWithArray:[self getDataSource:tableIndex]];
+        
+        [updatedDatasource moveObjectAtIndex:fromIndexPath.row toIndex:toIndexPath.row];
+        
+        [delegate didUpdateDatasource:updatedDatasource
+                            tableView:tableView];
+        
+        // update local dataSourceArray
+        DLTableData *tableData = self.tableDataArray[tableIndex];
+        tableData.datasource = updatedDatasource;
+        
+        [tableView moveRowAtIndexPath:fromIndexPath
+                          toIndexPath:toIndexPath];
+    }
 }
 
 #pragma mark - Device orientation notifications

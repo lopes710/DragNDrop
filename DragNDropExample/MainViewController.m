@@ -23,9 +23,14 @@
 
 @implementation MainViewController
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    self.edgesForExtendedLayout=UIRectEdgeNone;
+    self.extendedLayoutIncludesOpaqueBars=NO;
+    self.automaticallyAdjustsScrollViewInsets=NO;
     
     self.tableLettersDataSource = @[
                                 @"A",
@@ -60,6 +65,32 @@
                                 @"12",
                                 @"13",
                                 @"14",
+                                @"15",
+                                @"16",
+                                @"17",
+                                @"18",
+                                @"19",
+                                @"20",
+                                @"21",
+                                @"22",
+                                @"23",
+                                @"24",
+                                @"25",
+                                @"26",
+                                @"27",
+                                @"28",
+                                @"29",
+                                @"30",
+                                @"31",
+                                @"32",
+                                @"33",
+                                @"34",
+                                @"35",
+                                @"36",
+                                @"37",
+                                @"38",
+                                @"39",
+                                @"40"
                                 ];
     
     self.tableNumbers.dataSource = self;
@@ -80,6 +111,34 @@
                                        @"SE",
                                        @"GR",
                                        @"TK",
+                                       @"PT2",
+                                       @"GB2",
+                                       @"ES2",
+                                       @"FR2",
+                                       @"DE2",
+                                       @"IT2",
+                                       @"CZ2",
+                                       @"RS2",
+                                       @"HU2",
+                                       @"LT2",
+                                       @"ET2",
+                                       @"SE2",
+                                       @"GR2",
+                                       @"TK2",
+                                       @"PT3",
+                                       @"GB3",
+                                       @"ES3",
+                                       @"FR3",
+                                       @"DE3",
+                                       @"IT3",
+                                       @"CZ3",
+                                       @"RS3",
+                                       @"HU3",
+                                       @"LT3",
+                                       @"ET3",
+                                       @"SE3",
+                                       @"GR3",
+                                       @"TK3"
                                     ];
     
     self.tableCharacters.dataSource = self;
@@ -99,7 +158,7 @@
                              dataSource:self.tableNumbersDataSource
                                delegate:self
                               tableName:@"tableNumbers"
-                     canIntersectTables:@[]];
+                     canIntersectTables:@[@"tableNumbers"]];
     
     [[DragNDrop sharedManager] addTable:self.tableCharacters
                              dataSource:self.tableCharactersDataSource
@@ -109,6 +168,7 @@
                                           @"tableLetters",
                                           @"tableCharacters"
                                           ]];
+    
     
     
     self.tableLetters.layer.borderColor = [UIColor redColor].CGColor;
@@ -151,7 +211,6 @@
     if(tableView == self.tableLetters) {
         
         cell = [self.tableLetters dequeueReusableCellWithIdentifier:@"CellLetters"];
-        
         
         if (cell == nil) {
             
@@ -221,8 +280,7 @@
 
 #pragma mark - DragNDropDelegate
 
-- (void)didDragOutside:(UITableView *)tableView
-     updatedDatasource:(NSMutableArray *)datasource {
+- (void)didUpdateDatasource:(NSMutableArray *)datasource tableView:(UITableView *)tableView {
 
     if(tableView == self.tableLetters) {
         
@@ -233,26 +291,8 @@
         self.tableNumbersDataSource = datasource;
         
     } else {
-    
+        
         self.tableCharactersDataSource = datasource;
     }
 }
-
-- (void)didInsertCellIn:(UITableView *)tableView
-      updatedDatasource:(NSMutableArray *)datasource {
-
-    if(tableView == self.tableLetters) {
-        
-        self.tableLettersDataSource = datasource;
-        
-    } else if(tableView == self.tableNumbers) {
-        
-        self.tableNumbersDataSource = datasource;
-        
-    } else {
-    
-        self.tableCharactersDataSource = datasource;
-    }
-}
-
 @end
