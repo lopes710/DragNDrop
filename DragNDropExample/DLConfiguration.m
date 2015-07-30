@@ -33,7 +33,6 @@ static CGFloat const kScrollDuration = 0.03;
 
 - (void)setAnimationDurationInSeconds:(CGFloat)animationDurationInSeconds {
 
-    // should I put a maximum here ??
     if (animationDurationInSeconds <= 2.0) {
     
         _repositionDurationInSeconds = animationDurationInSeconds;
@@ -45,5 +44,17 @@ static CGFloat const kScrollDuration = 0.03;
     }
 }
 
+- (void)setScrollDurationInSeconds:(CGFloat)scrollDurationInSeconds {
+
+    if (scrollDurationInSeconds <= 0.1) {
+        
+        _scrollDurationInSeconds = scrollDurationInSeconds;
+        
+    } else {
+        
+        _scrollDurationInSeconds = kScrollDuration;
+        
+    }
+}
 
 @end

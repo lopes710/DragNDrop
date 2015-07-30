@@ -182,6 +182,7 @@
     
     //    [DragNDrop sharedManager].configuration.animationDurationInSeconds = 1.0;
     //    [DragNDrop sharedManager].configuration.canMoveCellWithinTable = NO;
+//    [DragNDrop sharedManager].configuration.scrollDurationInSeconds = 0.03;
     
 }
 
