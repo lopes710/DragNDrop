@@ -8,6 +8,9 @@
 
 #import "AppDelegate.h"
 #import "MainViewController.h"
+#import "DLSplitViewController.h"
+#import "DLMasterViewController.h"
+#import "DLDetailViewController.h"
 
 @interface AppDelegate ()
 
@@ -23,11 +26,15 @@
     
     // Override point for customization after application launch.
     
-    MainViewController *test = [[MainViewController alloc] initWithNibName:NSStringFromClass([MainViewController class])
-                                                                    bundle:nil];
+//    MainViewController *mainViewController = [[MainViewController alloc] initWithNibName:NSStringFromClass([MainViewController class])
+//                                                                    bundle:nil];
     
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:test];
-    self.window.rootViewController = nav;
+//    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:mainViewController];
+//    self.window.rootViewController = nav;
+//    [self.window makeKeyAndVisible];
+    
+    DLSplitViewController *splitViewController = [[DLSplitViewController alloc] initWithNibName:NSStringFromClass([DLSplitViewController class]) bundle:nil];
+    self.window.rootViewController = splitViewController;
     [self.window makeKeyAndVisible];
     
     return YES;
