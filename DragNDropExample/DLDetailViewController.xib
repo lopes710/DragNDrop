@@ -6,6 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DLDetailViewController">
             <connections>
+                <outlet property="tablePlay" destination="YEG-Fc-lEo" id="ZKj-0K-XHp"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -14,20 +15,17 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Detail" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I86-tL-h5b">
-                    <rect key="frame" x="0.0" y="0.0" width="44" height="21"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="21" id="OAA-7X-APG"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="YEG-Fc-lEo">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </tableView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="I86-tL-h5b" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="w6r-ZP-yic"/>
-                <constraint firstItem="I86-tL-h5b" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="xml-SY-RQd"/>
+                <constraint firstItem="YEG-Fc-lEo" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="6pf-QM-Ygh"/>
+                <constraint firstAttribute="trailing" secondItem="YEG-Fc-lEo" secondAttribute="trailing" id="7gE-Q6-bWN"/>
+                <constraint firstItem="YEG-Fc-lEo" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="DhQ-if-Pgz"/>
+                <constraint firstAttribute="bottom" secondItem="YEG-Fc-lEo" secondAttribute="bottom" id="nhS-CW-URO"/>
             </constraints>
         </view>
     </objects>

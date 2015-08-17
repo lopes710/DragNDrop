@@ -14,8 +14,54 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "49"
-            endingLineNumber = "49"
-            landmarkName = "-addTable:"
+            endingLineNumber = "49">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DragNDropExample/DragNDrop.m"
+            timestampString = "460112997.578348"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "407"
+            endingLineNumber = "407"
+            landmarkName = "-checkIntersectionWhileStateChanged:pointPress:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DragNDropExample/DragNDrop.m"
+            timestampString = "460113192.515614"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "413"
+            endingLineNumber = "413"
+            landmarkName = "-checkIntersectionWhileStateChanged:pointPress:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DragNDropExample/DragNDrop.m"
+            timestampString = "460113725.625968"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "479"
+            endingLineNumber = "479"
+            landmarkName = "-checkIntersectionWhileStateChanged:pointPress:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

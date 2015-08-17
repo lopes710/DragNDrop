@@ -41,11 +41,12 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
 /* TODOs:
 
  1) Add a flag inDrag to not select another cell while animating                    -
- 2) optional: Make placeholder empty or with data ?                                 -
+ 2) optional: Make placeholder empty or with data ?                                 -   done
  3) Add system to know what tables are able to intersect anothers                   -   done
  4) optional: configuration of draggedCell ?                                        -
  5) scroll when drag in top or bottom                                               -   done
  6) optional: allow to delete cell instead of get reposition to original location   -
+ 7) check intersection when table is empty                                          -   done
  
  */
 
@@ -379,7 +380,7 @@ canIntersectTables:(NSArray *)intersectTables {
         // check if the point pressed is inside a tableView
         if (CGRectContainsPoint(selectedTableViewRect, pointPositionPressed)) {
 
-            // check if entered in a new tableView directly from another
+            // check if entered in a new tableView directly from another tableView
             // if it does it should delete the previous placeholder cell
             if(self.placeHolderCellData
                && idx != self.placeHolderCellData.selectedIndexOfList) {
@@ -394,6 +395,19 @@ canIntersectTables:(NSArray *)intersectTables {
             CGPoint pointPositionInTableView = [sender locationInView:tableView];
             NSIndexPath *indexPath = [tableView indexPathForRowAtPoint:pointPositionInTableView];
             
+            // in case of datasource empty make first indexPath to zero
+//            if (tableData.datasource.count == 0) {
+//                
+//                indexPath = [NSIndexPath indexPathForRow:0
+//                                               inSection:0];
+//            }
+            
+            if(!indexPath && !self.placeHolderCellData) {
+             
+                indexPath = [NSIndexPath indexPathForRow:tableData.datasource.count
+                                               inSection:0];
+            }
+
             if(indexPath) {
                 
                 if (!self.placeHolderCellData) {
@@ -404,12 +418,7 @@ canIntersectTables:(NSArray *)intersectTables {
                     
                     [self insertRowAt:indexPath
                            tableIndex:idx
-                                 item:[NSNull null]];
-                    
-                    // TODO: insert blank row TODO: make it an optionBlankCell or with value ??
-                    //                        [self insertRowAt:indexPath
-                    //                               tableIndex:idx
-                    //                                     item:self.draggedCellData.draggedItem];
+                                 item:self.configuration.showEmptyCellOnDrag ? [NSNull null] : self.draggedCellData.draggedItem];
                     
                 } else if ([self.placeHolderCellData.selectedIndexPathInsideList compare:indexPath] != NSOrderedSame) {
                     

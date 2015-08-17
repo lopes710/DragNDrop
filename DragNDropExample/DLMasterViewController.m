@@ -8,10 +8,11 @@
 
 #import "DLMasterViewController.h"
 #import "DragNDrop.h"
+#import "DLMasterTableViewCell.h"
 
 @interface DLMasterViewController () <UITableViewDelegate, UITableViewDataSource, DragNDropDelegate>
 
-@property (nonatomic, weak) IBOutlet UITableView *tableStores;
+@property (nonatomic, weak) IBOutlet UITableView *tablePlayers;
 @property (nonatomic, strong) NSArray *dataSource;
 
 @end
@@ -22,54 +23,60 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    [self.tablePlayers registerNib:[UINib nibWithNibName:NSStringFromClass([DLMasterTableViewCell class]) bundle:nil]
+            forCellReuseIdentifier:NSStringFromClass([DLMasterTableViewCell class])];
+    
     self.dataSource = @[
-                                    @"Store A",
-                                    @"Store B",
-                                    @"Store C",
-                                    @"Store D",
-                                    @"Store E",
-                                    @"Store F",
-                                    @"Store G",
-                                    @"Store H",
-                                    @"Store I",
-                                    @"Store J",
-                                    @"Store K",
-                                    @"Store L",
-                                    @"Store M",
-                                    @"Store N",
-                                    @"Store O",
-                                    @"Store P",
-                                    @"Store Q",
-                                    @"Store R",
-                                    @"Store S",
-                                    @"Store T",
-                                    @"Store U",
-                                    @"Store V",
-                                    @"Store X",
-                                    @"Store Z",
-                                    @"Store AA",
-                                    @"Store BB",
-                                    @"Store CC",
-                                    @"Store DD",
-                                    @"Store EE",
-                                    @"Store FF",
-                                    @"Store GG",
-                                    @"Store HH",
-                                    @"Store II",
-                                    @"Store JJ",
-                                    @"Store KK",
-                                    @"Store LL"
+                                    @"Player A",
+                                    @"Player B",
+                                    @"Player C",
+                                    @"Player D",
+                                    @"Player E",
+                                    @"Player F",
+                                    @"Player G",
+                                    @"Player H",
+                                    @"Player I",
+                                    @"Player J",
+                                    @"Player K",
+                                    @"Player L",
+                                    @"Player M",
+                                    @"Player N",
+                                    @"Player O",
+                                    @"Player P",
+                                    @"Player Q",
+                                    @"Player R",
+                                    @"Player S",
+                                    @"Player T",
+                                    @"Player U",
+                                    @"Player V",
+                                    @"Player X",
+                                    @"Player Z",
+                                    @"Player AA",
+                                    @"Player BB",
+                                    @"Player CC",
+                                    @"Player DD",
+                                    @"Player EE",
+                                    @"Player FF",
+                                    @"Player GG",
+                                    @"Player HH",
+                                    @"Player II",
+                                    @"Player JJ",
+                                    @"Player KK",
+                                    @"Player LL"
                                     ];
     
-    self.tableStores.dataSource = self;
-    self.tableStores.delegate = self;
+    self.tablePlayers.dataSource = self;
+    self.tablePlayers.delegate = self;
     
-    [[DragNDrop sharedManager] addTable:self.tableStores
+    [[DragNDrop sharedManager] addTable:self.tablePlayers
                              dataSource:self.dataSource
                                delegate:self
-                              tableName:@"tableStores"
+                              tableName:@"tablePlayers"
                      canIntersectTables:@[
+                                          @"tablePlay"
                                           ]];
+    
+//    [DragNDrop sharedManager].configuration.showEmptyCellOnDrag = NO;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView
@@ -82,26 +89,26 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    UITableViewCell *cell;
+    DLMasterTableViewCell *cell;
     
-    cell = [self.tableStores dequeueReusableCellWithIdentifier:@"CellStore"];
+    cell = [self.tablePlayers dequeueReusableCellWithIdentifier:NSStringFromClass([DLMasterTableViewCell class])];
     
     if (cell == nil) {
         
         //create new cell
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                      reuseIdentifier:@"CellStore"];
+        cell = [[DLMasterTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                      reuseIdentifier:NSStringFromClass([DLMasterTableViewCell class])];
     }
-    
+
     // TODO: how to force this validation in the side of the user ??
     if (self.dataSource[indexPath.row] == (id)[NSNull null]) {
         
         // TODO: reset CELL how to for this in the user side ??
-        cell.textLabel.text = @"";
+        cell.playerLabel.text = @"";
         
     } else {
         
-        cell.textLabel.text = self.dataSource[indexPath.row];
+        cell.playerLabel.text = self.dataSource[indexPath.row];
     }
     
     return cell;
@@ -109,7 +116,8 @@
 
 #pragma mark - DragNDropDelegate
 
-- (void)didUpdateDatasource:(NSMutableArray *)datasource tableView:(UITableView *)tableView {
+- (void)didUpdateDatasource:(NSMutableArray *)datasource
+                  tableView:(UITableView *)tableView {
     
     self.dataSource = datasource;
 }

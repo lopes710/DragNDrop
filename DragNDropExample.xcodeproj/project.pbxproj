@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		307BF1381B1E71670044BD8A /* DragNDrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 307BF1371B1E71670044BD8A /* DragNDrop.m */; };
+		30D545CA1B6CC92C007E292B /* DLMasterTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 30D545C81B6CC92C007E292B /* DLMasterTableViewCell.m */; };
+		30D545CB1B6CC92C007E292B /* DLMasterTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 30D545C91B6CC92C007E292B /* DLMasterTableViewCell.xib */; };
 		45A631E11B61A21B00D755AD /* DLDraggedCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = 45A631E01B61A21B00D755AD /* DLDraggedCellData.m */; };
 		45A631ED1B63AF1D00D755AD /* DLPlaceholderCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = 45A631EC1B63AF1D00D755AD /* DLPlaceholderCellData.m */; };
 		45A631F01B65211F00D755AD /* NSMutableArray+Actions.m in Sources */ = {isa = PBXBuildFile; fileRef = 45A631EF1B65211F00D755AD /* NSMutableArray+Actions.m */; };
@@ -43,6 +45,9 @@
 		306687121B1E7723008DEABA /* RBSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBSplitViewController.m; sourceTree = "<group>"; };
 		307BF1361B1E71670044BD8A /* DragNDrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragNDrop.h; sourceTree = "<group>"; };
 		307BF1371B1E71670044BD8A /* DragNDrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragNDrop.m; sourceTree = "<group>"; };
+		30D545C71B6CC92C007E292B /* DLMasterTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLMasterTableViewCell.h; sourceTree = "<group>"; };
+		30D545C81B6CC92C007E292B /* DLMasterTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLMasterTableViewCell.m; sourceTree = "<group>"; };
+		30D545C91B6CC92C007E292B /* DLMasterTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DLMasterTableViewCell.xib; sourceTree = "<group>"; };
 		45A631DF1B61A21B00D755AD /* DLDraggedCellData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLDraggedCellData.h; sourceTree = "<group>"; };
 		45A631E01B61A21B00D755AD /* DLDraggedCellData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLDraggedCellData.m; sourceTree = "<group>"; };
 		45A631EB1B63AF1D00D755AD /* DLPlaceholderCellData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLPlaceholderCellData.h; sourceTree = "<group>"; };
@@ -117,6 +122,16 @@
 			name = DragNDrop;
 			sourceTree = "<group>";
 		};
+		30D545C61B6CC8C7007E292B /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				30D545C71B6CC92C007E292B /* DLMasterTableViewCell.h */,
+				30D545C81B6CC92C007E292B /* DLMasterTableViewCell.m */,
+				30D545C91B6CC92C007E292B /* DLMasterTableViewCell.xib */,
+			);
+			name = Cell;
+			sourceTree = "<group>";
+		};
 		45B11D041B1DEFD80006C937 = {
 			isa = PBXGroup;
 			children = (
@@ -180,6 +195,7 @@
 		45FA1E741B6BAEF1006D461A /* SplitViewController */ = {
 			isa = PBXGroup;
 			children = (
+				30D545C61B6CC8C7007E292B /* Cell */,
 				45FA1E6F1B6BAD38006D461A /* DLSplitViewController.h */,
 				45FA1E701B6BAD38006D461A /* DLSplitViewController.m */,
 				45FA1E711B6BAD38006D461A /* DLSplitViewController.xib */,
@@ -278,6 +294,7 @@
 				45FA1E731B6BAD39006D461A /* DLSplitViewController.xib in Resources */,
 				45FA1E7E1B6BAF35006D461A /* DLDetailViewController.xib in Resources */,
 				45B11D3F1B1DF2EF0006C937 /* MainViewController.xib in Resources */,
+				30D545CB1B6CC92C007E292B /* DLMasterTableViewCell.xib in Resources */,
 				45B11D1E1B1DEFD80006C937 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -303,6 +320,7 @@
 				45B11D131B1DEFD80006C937 /* main.m in Sources */,
 				45FA1E781B6BAF24006D461A /* DLMasterViewController.m in Sources */,
 				45A632191B67BCE100D755AD /* DLTableData.m in Sources */,
+				30D545CA1B6CC92C007E292B /* DLMasterTableViewCell.m in Sources */,
 				307BF1381B1E71670044BD8A /* DragNDrop.m in Sources */,
 				45A631F01B65211F00D755AD /* NSMutableArray+Actions.m in Sources */,
 				45FA1E721B6BAD38006D461A /* DLSplitViewController.m in Sources */,
