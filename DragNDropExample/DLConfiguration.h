@@ -10,6 +10,6 @@
 
 @property (nonatomic, assign) CGFloat repositionDurationInSeconds;
 @property (nonatomic, assign) CGFloat scrollDurationInSeconds;
-@property (nonatomic, assign) BOOL showEmptyCellOnDrag;
+@property (nonatomic, assign) BOOL showEmptyCellOnHovering;
 
 @end

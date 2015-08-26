@@ -23,7 +23,7 @@
     // Do any additional setup after loading the view from its nib.
     
     self.dataSource = @[
-                        /*@"Game A",
+                        @"Game A",
                         @"Game B",
                         @"Game C",
                         @"Game D",
@@ -58,7 +58,7 @@
                         @"Game II",
                         @"Game JJ",
                         @"Game KK",
-                        @"Game LL"*/
+                        @"Game LL"
                         ];
     
     self.tablePlay.dataSource = self;
@@ -68,7 +68,12 @@
                              dataSource:self.dataSource
                                delegate:self
                               tableName:@"tablePlay"
-                     canIntersectTables:@[]];
+                     canIntersectTables:@[
+                                          @"tablePlayers",
+                                          @"tablePlay"
+                                          ]];
+    
+//    [DragNDrop sharedManager].configuration.showEmptyCellOnHovering = YES;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView
@@ -91,6 +96,9 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                       reuseIdentifier:@"CellGame"];
     }
+    
+//    cell.backgroundColor = [UIColor redColor];
+//    [[DragNDrop sharedManager] configureSelectionOfCell:cell];
     
     // TODO: how to force this validation in the side of the user ??
     if (self.dataSource[indexPath.row] == (id)[NSNull null]) {

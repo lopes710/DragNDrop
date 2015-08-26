@@ -47,6 +47,8 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
  5) scroll when drag in top or bottom                                               -   done
  6) optional: allow to delete cell instead of get reposition to original location   -
  7) check intersection when table is empty                                          -   done
+ 8) make "if (self.dataSource[indexPath.row] == (id)[NSNull null]) {" mandatory in cellforrow - how to do this ??
+ 9) make "cell.selectionStyle = UITableViewCellSelectionStyleNone;" mandatory in cellForRow  - how to do this ??
  
  */
 
@@ -117,6 +119,12 @@ canIntersectTables:(NSArray *)intersectTables {
         longPress.minimumPressDuration = 0.2f;
         [tableView addGestureRecognizer:longPress];
     }
+}
+
+
+- (void)configureSelectionOfCell:(UITableViewCell *)cell {
+
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 
 #pragma mark - GestureRecognizer methods
@@ -195,13 +203,20 @@ canIntersectTables:(NSArray *)intersectTables {
 }
 
 - (UIImage *)createImageFromCell:(UITableViewCell *)cell {
+
+//    UIGraphicsBeginImageContextWithOptions(cell.bounds.size, NO, 0.f);
+//    [cell.layer renderInContext:UIGraphicsGetCurrentContext()];
+//    UIImage *imageCell = UIGraphicsGetImageFromCurrentImageContext();
+//    UIGraphicsEndImageContext();
+//    
+//    return imageCell;
     
-    UIGraphicsBeginImageContext(cell.bounds.size);
-    [cell.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *imageCell = UIGraphicsGetImageFromCurrentImageContext();
+    // faster - TODO: check from what ios version this works
+    UIGraphicsBeginImageContextWithOptions(cell.bounds.size, cell.opaque, 0.0f);
+    [cell drawViewHierarchyInRect:cell.bounds afterScreenUpdates:YES];
+    UIImage * snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
-    return imageCell;
+    return snapshotImage;
 }
 
 - (void)clearDraggedCell {
@@ -328,6 +343,7 @@ canIntersectTables:(NSArray *)intersectTables {
         UIImageView *imageViewCell = [[UIImageView alloc] initWithImage:imageCell];
         
         [draggedCell addSubview:imageViewCell];
+        [draggedCell bringSubviewToFront:imageViewCell];
         
         // get point in draggedCell to set the origin point to move the copied cell
         self.pointPositionInCell = [sender locationInView:cell];
@@ -336,7 +352,10 @@ canIntersectTables:(NSArray *)intersectTables {
         
         draggedCell.frame = CGRectMake(self.pointPositionOriginPressed.x, self.pointPositionOriginPressed.y, self.draggedCellData.draggedCell.frame.size.width, self.draggedCellData.draggedCell.frame.size.height);
 
-        DLDraggedCellData *draggedCellData = [[DLDraggedCellData alloc] initWithCell:draggedCell selectedIndexOfList:selectedListIndexPathRow selectedIndexPathInsideList:indexPath item:currentDraggedItem];
+        DLDraggedCellData *draggedCellData = [[DLDraggedCellData alloc] initWithCell:draggedCell
+                                                                 selectedIndexOfList:selectedListIndexPathRow
+                                                         selectedIndexPathInsideList:indexPath
+                                                                                item:currentDraggedItem];
         
         completionBlock(draggedCellData);
         
@@ -418,7 +437,7 @@ canIntersectTables:(NSArray *)intersectTables {
                     
                     [self insertRowAt:indexPath
                            tableIndex:idx
-                                 item:self.configuration.showEmptyCellOnDrag ? [NSNull null] : self.draggedCellData.draggedItem];
+                                 item:self.configuration.showEmptyCellOnHovering ? [NSNull null] : self.draggedCellData.draggedItem];
                     
                 } else if ([self.placeHolderCellData.selectedIndexPathInsideList compare:indexPath] != NSOrderedSame) {
                     

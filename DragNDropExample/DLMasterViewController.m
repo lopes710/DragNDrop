@@ -76,7 +76,7 @@
                                           @"tablePlay"
                                           ]];
     
-//    [DragNDrop sharedManager].configuration.showEmptyCellOnDrag = NO;
+//    [DragNDrop sharedManager].configuration.showEmptyCellOnHovering = NO;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView
@@ -99,12 +99,15 @@
         cell = [[DLMasterTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                       reuseIdentifier:NSStringFromClass([DLMasterTableViewCell class])];
     }
+    
+//    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    [[DragNDrop sharedManager] configureSelectionOfCell:cell];
 
     // TODO: how to force this validation in the side of the user ??
     if (self.dataSource[indexPath.row] == (id)[NSNull null]) {
         
         // TODO: reset CELL how to for this in the user side ??
-        cell.playerLabel.text = @"";
+        cell.playerLabel.text = @"aaaa";
         
     } else {
         

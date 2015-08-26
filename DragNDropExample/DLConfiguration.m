@@ -26,7 +26,7 @@ static CGFloat const kScrollDuration = 0.03;
     
         _repositionDurationInSeconds = kRepositionDuration;
         _scrollDurationInSeconds     = kScrollDuration;
-        _showEmptyCellOnDrag         = YES;
+        _showEmptyCellOnHovering     = YES;
     }
     
     return self;
