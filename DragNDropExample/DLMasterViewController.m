@@ -76,7 +76,7 @@
                                           @"tablePlay"
                                           ]];
     
-//    [DragNDrop sharedManager].configuration.showEmptyCellOnHovering = NO;
+    [DragNDrop sharedManager].configuration.showEmptyCellOnHovering = NO;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView
