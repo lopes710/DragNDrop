@@ -48,7 +48,7 @@ typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellDa
  6) optional: allow to delete cell instead of get reposition to original location   -
  7) check intersection when table is empty                                          -   done
  8) make "if (self.dataSource[indexPath.row] == (id)[NSNull null]) {" mandatory in cellforrow - how to do this ??
- 9) make "cell.selectionStyle = UITableViewCellSelectionStyleNone;" mandatory in cellForRow  - how to do this ??
+ 9) make "cell.selectionStyle = UITableViewCellSelectionStyleNone;" mandatory in cellForRow  - done
  
  */
 

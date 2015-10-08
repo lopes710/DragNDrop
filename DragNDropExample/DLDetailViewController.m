@@ -97,8 +97,7 @@
                                       reuseIdentifier:@"CellGame"];
     }
     
-//    cell.backgroundColor = [UIColor redColor];
-//    [[DragNDrop sharedManager] configureSelectionOfCell:cell];
+    [[DragNDrop sharedManager] configureSelectionOfCell:cell];
     
     // TODO: how to force this validation in the side of the user ??
     if (self.dataSource[indexPath.row] == (id)[NSNull null]) {
