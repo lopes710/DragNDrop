@@ -51,18 +51,6 @@
                                     @"Player V",
                                     @"Player X",
                                     @"Player Z",
-                                    @"Player AA",
-                                    @"Player BB",
-                                    @"Player CC",
-                                    @"Player DD",
-                                    @"Player EE",
-                                    @"Player FF",
-                                    @"Player GG",
-                                    @"Player HH",
-                                    @"Player II",
-                                    @"Player JJ",
-                                    @"Player KK",
-                                    @"Player LL"
                                     ];
     
     self.tablePlayers.dataSource = self;
@@ -75,8 +63,6 @@
                      canIntersectTables:@[
                                           @"tablePlay"
                                           ]];
-    
-    [DragNDrop sharedManager].configuration.showEmptyCellOnHovering = NO;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView

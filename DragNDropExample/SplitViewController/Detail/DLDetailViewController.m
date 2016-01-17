@@ -23,42 +23,26 @@
     // Do any additional setup after loading the view from its nib.
     
     self.dataSource = @[
-                        @"Game A",
-                        @"Game B",
-                        @"Game C",
-                        @"Game D",
-                        @"Game E",
-                        @"Game F",
-                        @"Game G",
-                        @"Game H",
-                        @"Game I",
-                        @"Game J",
-                        @"Game K",
-                        @"Game L",
-                        @"Game M",
-                        @"Game N",
-                        @"Game O",
-                        @"Game P",
-                        @"Game Q",
-                        @"Game R",
-                        @"Game S",
-                        @"Game T",
-                        @"Game U",
-                        @"Game V",
-                        @"Game X",
-                        @"Game Z",
-                        @"Game AA",
-                        @"Game BB",
-                        @"Game CC",
-                        @"Game DD",
-                        @"Game EE",
-                        @"Game FF",
-                        @"Game GG",
-                        @"Game HH",
-                        @"Game II",
-                        @"Game JJ",
-                        @"Game KK",
-                        @"Game LL"
+                        @"Game 1",
+                        @"Game 2",
+                        @"Game 3",
+                        @"Game 4",
+                        @"Game 5",
+                        @"Game 6",
+                        @"Game 7",
+                        @"Game 8",
+                        @"Game 9",
+                        @"Game 10",
+                        @"Game 11",
+                        @"Game 12",
+                        @"Game 13",
+                        @"Game 14",
+                        @"Game 15",
+                        @"Game 16",
+                        @"Game 17",
+                        @"Game 18",
+                        @"Game 19",
+                        @"Game 20"
                         ];
     
     self.tablePlay.dataSource = self;
@@ -73,7 +57,7 @@
                                           @"tablePlay"
                                           ]];
     
-//    [DragNDrop sharedManager].configuration.showEmptyCellOnHovering = YES;
+    [DragNDrop sharedManager].configuration.showEmptyCellOnHovering = YES;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView

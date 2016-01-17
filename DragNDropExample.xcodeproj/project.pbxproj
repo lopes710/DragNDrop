@@ -41,10 +41,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		306687111B1E7723008DEABA /* RBSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBSplitViewController.h; sourceTree = "<group>"; };
-		306687121B1E7723008DEABA /* RBSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBSplitViewController.m; sourceTree = "<group>"; };
-		307BF1361B1E71670044BD8A /* DragNDrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragNDrop.h; sourceTree = "<group>"; };
-		307BF1371B1E71670044BD8A /* DragNDrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DragNDrop.m; sourceTree = "<group>"; };
+		307BF1361B1E71670044BD8A /* DragNDrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DragNDrop.h; path = DragNDropExample/DragNDrop/DragNDrop.h; sourceTree = SOURCE_ROOT; };
+		307BF1371B1E71670044BD8A /* DragNDrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DragNDrop.m; path = DragNDropExample/DragNDrop/DragNDrop.m; sourceTree = SOURCE_ROOT; };
 		30D545C71B6CC92C007E292B /* DLMasterTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLMasterTableViewCell.h; sourceTree = "<group>"; };
 		30D545C81B6CC92C007E292B /* DLMasterTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLMasterTableViewCell.m; sourceTree = "<group>"; };
 		30D545C91B6CC92C007E292B /* DLMasterTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DLMasterTableViewCell.xib; sourceTree = "<group>"; };
@@ -100,24 +98,76 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		307BF1391B1E76960044BD8A /* DragNDrop */ = {
+		303E67921C4C51FB00B6A18E /* Configuration */ = {
 			isa = PBXGroup;
 			children = (
-				45FA1E741B6BAEF1006D461A /* SplitViewController */,
-				306687111B1E7723008DEABA /* RBSplitViewController.h */,
-				306687121B1E7723008DEABA /* RBSplitViewController.m */,
+				45A631F71B667EE200D755AD /* DLConfiguration.h */,
+				45A631F81B667EE200D755AD /* DLConfiguration.m */,
+			);
+			path = Configuration;
+			sourceTree = "<group>";
+		};
+		3072C9D31C4C2E6C0096A19E /* DragNDrop */ = {
+			isa = PBXGroup;
+			children = (
 				307BF1361B1E71670044BD8A /* DragNDrop.h */,
 				307BF1371B1E71670044BD8A /* DragNDrop.m */,
+				303E67921C4C51FB00B6A18E /* Configuration */,
+				3072C9D71C4C34410096A19E /* DataModels */,
+				3072C9D61C4C32460096A19E /* Categories */,
+			);
+			path = DragNDrop;
+			sourceTree = "<group>";
+		};
+		3072C9D41C4C30F80096A19E /* MasterViewController */ = {
+			isa = PBXGroup;
+			children = (
+				45FA1E751B6BAF24006D461A /* DLMasterViewController.h */,
+				45FA1E761B6BAF24006D461A /* DLMasterViewController.m */,
+				45FA1E771B6BAF24006D461A /* DLMasterViewController.xib */,
+			);
+			name = MasterViewController;
+			path = Master;
+			sourceTree = "<group>";
+		};
+		3072C9D51C4C31270096A19E /* DetailViewController */ = {
+			isa = PBXGroup;
+			children = (
+				45FA1E7A1B6BAF35006D461A /* DLDetailViewController.h */,
+				45FA1E7B1B6BAF35006D461A /* DLDetailViewController.m */,
+				45FA1E7C1B6BAF35006D461A /* DLDetailViewController.xib */,
+			);
+			name = DetailViewController;
+			path = Detail;
+			sourceTree = "<group>";
+		};
+		3072C9D61C4C32460096A19E /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				45A631EE1B65211F00D755AD /* NSMutableArray+Actions.h */,
+				45A631EF1B65211F00D755AD /* NSMutableArray+Actions.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		3072C9D71C4C34410096A19E /* DataModels */ = {
+			isa = PBXGroup;
+			children = (
 				45A631DF1B61A21B00D755AD /* DLDraggedCellData.h */,
 				45A631E01B61A21B00D755AD /* DLDraggedCellData.m */,
 				45A631EB1B63AF1D00D755AD /* DLPlaceholderCellData.h */,
 				45A631EC1B63AF1D00D755AD /* DLPlaceholderCellData.m */,
-				45A631EE1B65211F00D755AD /* NSMutableArray+Actions.h */,
-				45A631EF1B65211F00D755AD /* NSMutableArray+Actions.m */,
-				45A631F71B667EE200D755AD /* DLConfiguration.h */,
-				45A631F81B667EE200D755AD /* DLConfiguration.m */,
 				45A632171B67BCE100D755AD /* DLTableData.h */,
 				45A632181B67BCE100D755AD /* DLTableData.m */,
+			);
+			path = DataModels;
+			sourceTree = "<group>";
+		};
+		307BF1391B1E76960044BD8A /* DragNDrop */ = {
+			isa = PBXGroup;
+			children = (
+				3072C9D31C4C2E6C0096A19E /* DragNDrop */,
+				45FA1E741B6BAEF1006D461A /* SplitViewController */,
 			);
 			name = DragNDrop;
 			sourceTree = "<group>";
@@ -129,7 +179,7 @@
 				30D545C81B6CC92C007E292B /* DLMasterTableViewCell.m */,
 				30D545C91B6CC92C007E292B /* DLMasterTableViewCell.xib */,
 			);
-			name = Cell;
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		45B11D041B1DEFD80006C937 = {
@@ -195,18 +245,14 @@
 		45FA1E741B6BAEF1006D461A /* SplitViewController */ = {
 			isa = PBXGroup;
 			children = (
-				30D545C61B6CC8C7007E292B /* Cell */,
 				45FA1E6F1B6BAD38006D461A /* DLSplitViewController.h */,
 				45FA1E701B6BAD38006D461A /* DLSplitViewController.m */,
 				45FA1E711B6BAD38006D461A /* DLSplitViewController.xib */,
-				45FA1E751B6BAF24006D461A /* DLMasterViewController.h */,
-				45FA1E761B6BAF24006D461A /* DLMasterViewController.m */,
-				45FA1E771B6BAF24006D461A /* DLMasterViewController.xib */,
-				45FA1E7A1B6BAF35006D461A /* DLDetailViewController.h */,
-				45FA1E7B1B6BAF35006D461A /* DLDetailViewController.m */,
-				45FA1E7C1B6BAF35006D461A /* DLDetailViewController.xib */,
+				3072C9D51C4C31270096A19E /* DetailViewController */,
+				3072C9D41C4C30F80096A19E /* MasterViewController */,
+				30D545C61B6CC8C7007E292B /* Cell */,
 			);
-			name = SplitViewController;
+			path = SplitViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

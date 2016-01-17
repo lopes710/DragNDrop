@@ -13,5 +13,7 @@
 @property (nonatomic, assign) NSInteger selectedIndexOfList;
 @property (nonatomic, strong) NSIndexPath *selectedIndexPathInsideList;
 
-- (instancetype)initWithSelectedIndexOfList:(NSInteger)index selectedIndexPathInsideList:(NSIndexPath *)indexPath item:(id)item;
+- (instancetype)initWithSelectedIndexOfList:(NSInteger)index
+                selectedIndexPathInsideList:(NSIndexPath *)indexPath
+                                       item:(id)item;
 @end

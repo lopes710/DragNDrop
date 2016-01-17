@@ -17,6 +17,10 @@
 @property (nonatomic, strong, readonly) NSString *tableName;
 @property (nonatomic, strong, readonly) NSArray *intersectTables;
 
-- (instancetype)initTable:(UITableView *)tableView dataSource:(NSArray *)datasource delegate:(id)delegate tableName:(NSString *)tableName canIntersectTables:(NSArray *)intersectTables;
+- (instancetype)initTable:(UITableView *)tableView
+               dataSource:(NSArray *)datasource
+                 delegate:(id)delegate
+                tableName:(NSString *)tableName
+       canIntersectTables:(NSArray *)intersectTables;
 
 @end
