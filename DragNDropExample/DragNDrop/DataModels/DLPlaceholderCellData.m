@@ -8,19 +8,14 @@
 
 #import "DLPlaceholderCellData.h"
 
-@interface DLPlaceholderCellData ()
-
-@end
-
 @implementation DLPlaceholderCellData
 
 #pragma mark - Lifecycle
 
-
 // TODO: does it need item param?
 - (instancetype)initWithSelectedIndexOfList:(NSInteger)index
                 selectedIndexPathInsideList:(NSIndexPath *)indexPath
-                        item:(id)item {
+                                       item:(id)item {
     
     self = [super init];
     

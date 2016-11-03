@@ -10,6 +10,9 @@
 #import "DragNDrop.h"
 #import "DLMasterTableViewCell.h"
 
+static NSString * const DLTablePlay = @"tablePlay";
+static NSString * const DLTablePlayers = @"tablePlayers";
+
 @interface DLMasterViewController () <UITableViewDelegate, UITableViewDataSource, DragNDropDelegate>
 
 @property (nonatomic, weak) IBOutlet UITableView *tablePlayers;
@@ -59,9 +62,9 @@
     [[DragNDrop sharedManager] addTable:self.tablePlayers
                              dataSource:self.dataSource
                                delegate:self
-                              tableName:@"tablePlayers"
+                              tableName:DLTablePlayers
                      canIntersectTables:@[
-                                          @"tablePlay"
+                                          DLTablePlay
                                           ]];
 }
 

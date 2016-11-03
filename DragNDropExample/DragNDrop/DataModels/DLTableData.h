@@ -14,8 +14,8 @@
 @property (nonatomic, strong, readonly) UITableView *tableView;
 @property (nonatomic, strong, readwrite) NSMutableArray *datasource;
 @property (nonatomic, strong, readonly) id <DragNDropDelegate> delegate;
-@property (nonatomic, strong, readonly) NSString *tableName;
-@property (nonatomic, strong, readonly) NSArray *intersectTables;
+@property (nonatomic, copy, readonly) NSString *tableName;
+@property (nonatomic, copy, readonly) NSArray *intersectTables;
 
 - (instancetype)initTable:(UITableView *)tableView
                dataSource:(NSArray *)datasource

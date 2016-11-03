@@ -8,15 +8,6 @@
 
 #import "DLTableData.h"
 
-@interface DLTableData ()
-
-@property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) id <DragNDropDelegate> delegate;
-@property (nonatomic, strong) NSString *tableName;
-@property (nonatomic, strong) NSArray *intersectTables;
-
-@end
-
 @implementation DLTableData
 
 #pragma mark - Lifecycle

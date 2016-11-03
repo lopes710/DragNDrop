@@ -11,7 +11,8 @@
 @implementation DLMasterTableViewCell
 
 - (void)awakeFromNib {
-    // Initialization code
+    
+    [super awakeFromNib];
     
     self.backgroundColor = [UIColor orangeColor];
 }

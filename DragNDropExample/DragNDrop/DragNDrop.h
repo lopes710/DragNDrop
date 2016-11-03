@@ -21,7 +21,11 @@
 
 + (instancetype)sharedManager;
 
-- (void)addTable:(UITableView *)tableView dataSource:(NSArray *)datasource delegate:(id)delegate tableName:(NSString *)tableName canIntersectTables:(NSArray *)intersectTables;
+- (void)addTable:(UITableView *)tableView
+      dataSource:(NSArray *)datasource
+        delegate:(id)delegate
+       tableName:(NSString *)tableName
+canIntersectTables:(NSArray *)intersectTables;
 
 - (void)configureSelectionOfCell:(UITableViewCell *)cell;
 

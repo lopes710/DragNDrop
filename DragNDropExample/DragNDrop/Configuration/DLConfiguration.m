@@ -12,10 +12,6 @@
 static CGFloat const kRepositionDuration = 0.5;
 static CGFloat const kScrollDuration = 0.03;
 
-@interface DLConfiguration ()
-
-@end
-
 @implementation DLConfiguration
 
 - (instancetype)init {

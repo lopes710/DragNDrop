@@ -10,10 +10,6 @@
 #import "DLMasterViewController.h"
 #import "DLDetailViewController.h"
 
-@interface DLSplitViewController ()
-
-@end
-
 @implementation DLSplitViewController
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -35,23 +31,5 @@
     
     return self;
 }
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    
-   
-//    DLMasterViewController *masterViewController = [[DLMasterViewController alloc] init];
-//    UINavigationController *masterNavigationController = [[UINavigationController alloc] initWithRootViewController:masterViewController];
-//    
-//    DLDetailViewController *detailViewController = [[DLDetailViewController alloc] init];
-//    UINavigationController *detailNavigationController = [[UINavigationController alloc] initWithRootViewController:detailViewController];
-//    
-////    UISplitViewController* splitViewController = [[UISplitViewController alloc] init];
-//    splitViewController.delegate = self;
-//    splitViewController.viewControllers = @[masterNavigationController, detailNavigationController];
-}
-
-
 
 @end

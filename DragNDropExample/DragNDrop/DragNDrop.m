@@ -13,6 +13,9 @@
 #import "DLTableData.h"
 
 #define kDLScrollSpeed      10.f
+static NSString * const DLTableViewKey = @"tableView";
+static NSString * const DLSenderKey = @"sender";
+static NSString * const DLPointPositionPressedKey = @"pointPositionPressed";
 
 typedef void(^DLCellOnLongPressCompletionBlock)(DLDraggedCellData *draggedCellData);
 
@@ -216,8 +219,8 @@ canIntersectTables:(NSArray *)intersectTables {
 //    
 //    return imageCell;
     
-    // faster - TODO: check from what ios version this works
-    UIGraphicsBeginImageContextWithOptions(cell.bounds.size, cell.opaque, 0.0f);
+    // TODO: check from what ios version this works
+    UIGraphicsBeginImageContextWithOptions(cell.bounds.size, cell.opaque, 0.0);
     [cell drawViewHierarchyInRect:cell.bounds afterScreenUpdates:YES];
     UIImage * snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
@@ -238,9 +241,9 @@ canIntersectTables:(NSArray *)intersectTables {
     
     NSDictionary *userDictionary = (NSDictionary *)sender.userInfo;
     
-    UITableView *tableView = userDictionary[@"tableView"];
-    UILongPressGestureRecognizer *longGesture = userDictionary[@"sender"];
-    CGPoint pointPositionPressed = [userDictionary[@"pointPositionPressed"] CGPointValue];
+    UITableView *tableView = userDictionary[DLTableViewKey];
+    UILongPressGestureRecognizer *longGesture = userDictionary[DLSenderKey];
+    CGPoint pointPositionPressed = [userDictionary[DLPointPositionPressedKey] CGPointValue];
     
     CGFloat tableViewHeight = tableView.contentSize.height - tableView.frame.size.height;
     
@@ -270,11 +273,11 @@ canIntersectTables:(NSArray *)intersectTables {
 
     NSDictionary *userDictionary = (NSDictionary *)sender.userInfo;
     
-    UITableView *tableView = userDictionary[@"tableView"];
-    UILongPressGestureRecognizer *longGesture = userDictionary[@"sender"];
-    CGPoint pointPositionPressed = [userDictionary[@"pointPositionPressed"] CGPointValue];
+    UITableView *tableView = userDictionary[DLTableViewKey];
+    UILongPressGestureRecognizer *longGesture = userDictionary[DLSenderKey];
+    CGPoint pointPositionPressed = [userDictionary[DLPointPositionPressedKey] CGPointValue];
 
-    if (tableView.contentOffset.y > 0.f) {
+    if (tableView.contentOffset.y > CGRectZero.origin.y) {
         
         CGPoint currentOff = tableView.contentOffset;
         currentOff.y -= kDLScrollSpeed;
@@ -451,40 +454,40 @@ canIntersectTables:(NSArray *)intersectTables {
             // Check if cell is near the bottom of table to scroll
             CGRect cellFrame = [tableView rectForRowAtIndexPath:indexPath];
             if (pointPositionPressed.y > (selectedTableViewRect.origin.y + selectedTableViewRect.size.height - cellFrame.size.height) ) {
-
+                
                 if (!self.timer) {
                     
                     self.timer = [NSTimer scheduledTimerWithTimeInterval:self.configuration.scrollDurationInSeconds
                                                                   target:self
                                                                 selector:@selector(scrollDown:)
                                                                 userInfo:@{
-                                                                           @"tableView"           : tableView,
-                                                                           @"sender"              : sender,
-                                                                           @"pointPositionPressed": [NSValue valueWithCGPoint:pointPositionPressed]
+                                                                           DLTableViewKey: tableView,
+                                                                           DLSenderKey: sender,
+                                                                           DLPointPositionPressedKey: [NSValue valueWithCGPoint:pointPositionPressed]
                                                                            }
                                                                  repeats:YES];
                 }
                 
             } else if (pointPositionPressed.y < (selectedTableViewRect.origin.y + cellFrame.size.height)) {
-
+                
                 if (!self.timer) {
-
+                    
                     if (tableView.contentOffset.y != 0) {
                         
                         self.timer = [NSTimer scheduledTimerWithTimeInterval:self.configuration.scrollDurationInSeconds
                                                                       target:self
                                                                     selector:@selector(scrollUp:)
                                                                     userInfo:@{
-                                                                               @"tableView"           : tableView,
-                                                                               @"sender"              : sender,
-                                                                               @"pointPositionPressed": [NSValue valueWithCGPoint:pointPositionPressed]
+                                                                               DLTableViewKey: tableView,
+                                                                               DLSenderKey: sender,
+                                                                               DLPointPositionPressedKey: [NSValue valueWithCGPoint:pointPositionPressed]
                                                                                }
                                                                      repeats:YES];
                     }
                 }
-            
+                
             } else {
-               
+                
                 [self resetTimer];
             }
             

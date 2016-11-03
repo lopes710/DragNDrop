@@ -8,15 +8,6 @@
 
 #import "DLDraggedCellData.h"
 
-@interface DLDraggedCellData ()
-
-@property (nonatomic, strong) UIImageView *draggedCell;
-@property (nonatomic, assign) NSInteger selectedIndexOfList;
-@property (nonatomic, strong) NSIndexPath *selectedIndexPathInsideList;
-@property (nonatomic, strong) id draggedItem;
-
-@end
-
 @implementation DLDraggedCellData
 
 #pragma mark - Lifecycle

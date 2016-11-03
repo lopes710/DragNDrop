@@ -9,6 +9,10 @@
 #import "DLDetailViewController.h"
 #import "DragNDrop.h"
 
+static NSString * const DLTablePlay = @"tablePlay";
+static NSString * const DLTablePlayers = @"tablePlayers";
+static NSString * const DLCellGame = @"CellGame";
+
 @interface DLDetailViewController () <UITableViewDelegate, UITableViewDataSource, DragNDropDelegate>
 
 @property (nonatomic, weak) IBOutlet UITableView *tablePlay;
@@ -51,10 +55,10 @@
     [[DragNDrop sharedManager] addTable:self.tablePlay
                              dataSource:self.dataSource
                                delegate:self
-                              tableName:@"tablePlay"
+                              tableName:DLTablePlay
                      canIntersectTables:@[
-                                          @"tablePlayers",
-                                          @"tablePlay"
+                                          DLTablePlayers,
+                                          DLTablePlay
                                           ]];
     
     [DragNDrop sharedManager].configuration.showEmptyCellOnHovering = YES;
@@ -72,13 +76,13 @@
     
     UITableViewCell *cell;
     
-    cell = [self.tablePlay dequeueReusableCellWithIdentifier:@"CellGame"];
+    cell = [self.tablePlay dequeueReusableCellWithIdentifier:DLCellGame];
     
     if (cell == nil) {
         
         //create new cell
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                      reuseIdentifier:@"CellGame"];
+                                      reuseIdentifier:DLCellGame];
     }
     
     [[DragNDrop sharedManager] configureSelectionOfCell:cell];
@@ -86,7 +90,7 @@
     // TODO: how to force this validation in the side of the user ??
     if (self.dataSource[indexPath.row] == (id)[NSNull null]) {
         
-        // TODO: reset CELL how to for this in the user side ??
+        // TODO: reset CELL how to do this in the user side ??
         cell.textLabel.text = @"";
         
     } else {
