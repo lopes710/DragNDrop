@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'DragNDrop_Example' do
+  pod 'DragNDrop', :path => '../'
+
+  target 'DragNDrop_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

@@ -1,0 +1,22 @@
+{
+  "name": "DragNDrop",
+  "version": "0.1.0",
+  "summary": "A short description of DragNDrop.",
+  "description": "DragNDrop framework to drag and drop cells between tableViews.",
+  "homepage": "https://github.com/<GITHUB_USERNAME>/DragNDrop",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Duarte Lopes": "duarte.lopes85@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/<GITHUB_USERNAME>/DragNDrop.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "DragNDrop/Classes/**/*"
+}
