@@ -16,7 +16,7 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Requirements
 
-Valid for ios 8 or higher.
+Valid for iOS 8 or higher.
 To try the test demo run in a iPad or iPad simulator.
 
 ## Installation
@@ -38,17 +38,19 @@ Simply add the table information in the DragNDrop framework. Example:
                                         ]];
 
 The data source must be an array. One should set a name for each table view and enumerate the other table names that can interact with.
-To drag N Drop in the same table also add the table name to the canIntersectTables parameter.
+To drag and drop in the same table also add the table name to the canIntersectTables parameter.
 
 To configure some properties of the DragNDrop simply access the configuration property. Example:
 
     [DragNDrop sharedManager].configuration.showEmptyCellOnHovering = YES;
 
 There are three properties you can configure.
-* showEmptyCellOnHovering A boolean to show a standard empty cell when hovering the dragged cell.
-* scrollDurationInSeconds The speed of scroll when dragging a cell on top or bottom of a tableView.
-* repositionDurationInSeconds The speed of the cell when moving to the new position in the tableView or back to it´s original position if not
-                              dropped in the right position or if the app changed orientation.
+* showEmptyCellOnHovering 
+    A boolean to show a standard empty cell when hovering the dragged cell.
+* scrollDurationInSeconds 
+    The speed of scroll when dragging a cell on top or bottom of a tableView.
+* repositionDurationInSeconds 
+    The speed of the cell when moving to the new position in the tableView or back to its original position if not dropped in the right position or if the app changed orientation.
 
   ### Note
 
