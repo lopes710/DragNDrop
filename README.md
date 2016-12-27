@@ -12,9 +12,9 @@ drop it.
 
 Check this videos to see it working:
 
-[![Drag & Drop to from one table to another](https://drive.google.com/open?id=0B1aAnBtF7faYWnk4SmN6cjdKZFE)](https://drive.google.com/open?id=0B1aAnBtF7faYN1pSazQ4cFBkQWc)
+[![Drag & Drop to from one table to another](https://drive.google.com/open?id=0B1aAnBtF7faYTFpxYXpZUEplTFE)](https://drive.google.com/open?id=0B1aAnBtF7faYN1pSazQ4cFBkQWc)
 
-[![Drag & Drop to inside the same table](https://drive.google.com/open?id=0B1aAnBtF7faYRFFoR1VrbFhJZnM)](https://drive.google.com/open?id=0B1aAnBtF7faYZ2RvWnk3bDNaMkU)
+[![Drag & Drop to inside the same table](https://drive.google.com/open?id=0B1aAnBtF7faYUURIdUVTZ0pVYlU)](https://drive.google.com/open?id=0B1aAnBtF7faYZ2RvWnk3bDNaMkU)
 
 ## Example
 
