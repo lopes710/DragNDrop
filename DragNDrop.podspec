@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-DragNDrop framework to drag and drop cells between tableViews.
+TODO: Add long description of the pod here.
                        DESC
 
   s.homepage         = 'https://github.com/<GITHUB_USERNAME>/DragNDrop'

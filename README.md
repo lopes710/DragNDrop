@@ -25,11 +25,6 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 Valid for iOS 8 or higher.
 To try the test demo run in a iPad or iPad simulator.
 
-## Installation
-
-DragNDrop is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
-
 ## How to use it
 
 Simply add the table information in the DragNDrop framework. Example:
@@ -56,23 +51,23 @@ There are three properties you can configure.
 * scrollDurationInSeconds 
     The speed of scroll when dragging a cell on top or bottom of a tableView.
 * repositionDurationInSeconds 
-    The speed of the cell when moving to the new position in the tableView or back to its original position if not dropped in the right position or if the app changed orientation.
+    The speed of the cell when moving to the new position in the tableView or back to its original position if not dropped in the right
+    position or if the app changed orientation.
 
-  ### Note
+   ### Note
 
-  When dropping a cell in a tableView, the data source array for that table is updated with a new item. This means that if this item type is different from the original 
-  items in the data source one needs to check this in the delegate method:
+    When dropping a cell in a tableView, the data source array for that table is updated with a new item. This means that if this item type is different from the original items in the data source one needs to check this in the delegate method:
 
     - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 
 Example:
 
-    if (self.dataSource[indexPath.row] == [ExampleItemTypeClass class]) {
-    
-        // Pass and set the info needed to the new cell
-        ExampleItemTypeClass *exampleItem = self.dataSource[indexPath.row];
-        cell.textLabel.text = exampleItem.exampleText;
-    }
+     if (self.dataSource[indexPath.row] == [ExampleItemTypeClass class]) {
+
+         // Pass and set the info needed to the new cell
+         ExampleItemTypeClass *exampleItem = self.dataSource[indexPath.row];
+         cell.textLabel.text = exampleItem.exampleText;
+     }
 
 If the property showEmptyCellOnHovering is set to YES, it´s needed to also recognize an empty cell. This means another conditional.
 Example:
@@ -85,6 +80,11 @@ Example:
 
 Any questions please contact me.
 Have fun :)
+
+## Installation
+
+DragNDrop is available through [CocoaPods](http://cocoapods.org). To install
+it, simply add the following line to your Podfile:
 
 ```ruby
 pod "DragNDrop"
