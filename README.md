@@ -1,6 +1,6 @@
 # DragNDrop
 
-[![CI Status](http://img.shields.io/travis/Duarte Lopes/DragNDrop.svg?style=flat)](https://travis-ci.org/lopes710/DragNDrop)
+[![CI Status](http://img.shields.io/travis/lopes710/DragNDrop.svg?style=flat)](https://travis-ci.org/lopes710/DragNDrop)
 [![Version](https://img.shields.io/cocoapods/v/DragNDrop.svg?style=flat)](http://cocoapods.org/pods/DragNDrop)
 [![License](https://img.shields.io/cocoapods/l/DragNDrop.svg?style=flat)](http://cocoapods.org/pods/DragNDrop)
 [![Platform](https://img.shields.io/cocoapods/p/DragNDrop.svg?style=flat)](http://cocoapods.org/pods/DragNDrop)
