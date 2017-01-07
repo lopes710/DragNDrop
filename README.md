@@ -7,14 +7,13 @@
 
 ## Purpose
 
-This pod enables an easy and fast way to move around items between tableViews. One can select a cell, drag it on top of another tableView and
-drop it.
+This pod enables an easy and fast way to move around items between tableViews. One can select a cell, drag it on top of another or the same tableView and drop it.
 
 Check this videos to see it working:
 
 [Drag & Drop to from one table to another](https://drive.google.com/open?id=0B1aAnBtF7faYN1pSazQ4cFBkQWc)
 
-[Drag & Drop to inside the same table](https://drive.google.com/open?id=0B1aAnBtF7faYZ2RvWnk3bDNaMkU)
+[Drag & Drop inside the same table](https://drive.google.com/open?id=0B1aAnBtF7faYZ2RvWnk3bDNaMkU)
 
 ## Example
 
