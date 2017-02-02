@@ -13,8 +13,6 @@ From one table to another  |  Inside the same table
 :-------------------------:|:-------------------------:
 ![](https://raw.githubusercontent.com/lopes710/DragNDrop/master/Example/DragNDrop1.gif)  |  ![](https://raw.githubusercontent.com/lopes710/DragNDrop/master/Example/DragNDrop2.gif)
 
-![](https://raw.githubusercontent.com/lopes710/DragNDrop/master/Example/DragNDrop1.gif) ![](https://raw.githubusercontent.com/lopes710/DragNDrop/master/Example/DragNDrop2.gif)
-
 Or check this videos to see it working:
 
 [Drag & Drop to from one table to another](https://drive.google.com/open?id=0B1aAnBtF7faYN1pSazQ4cFBkQWc)
