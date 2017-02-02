@@ -9,9 +9,11 @@
 
 This pod enables an easy and fast way to move around items between any number of tableViews. One can select a cell, drag it on top of another or in the same tableView and drop it.
 
-![](https://www.dropbox.com/s/roaeah9m62ug1pm/DragNDrop1.gif?dl=0)
+![](https://raw.githubusercontent.com/lopes710/DragNDrop/master/Example/DragNDrop1.gif)
 
-Check this videos to see it working:
+![](https://raw.githubusercontent.com/lopes710/DragNDrop/master/Example/DragNDrop2.gif)
+
+Or check this videos to see it working:
 
 [Drag & Drop to from one table to another](https://drive.google.com/open?id=0B1aAnBtF7faYN1pSazQ4cFBkQWc)
 
