@@ -7,7 +7,9 @@
 
 ## Purpose
 
-This pod enables an easy and fast way to move around items between tableViews. One can select a cell, drag it on top of another or the same tableView and drop it.
+This pod enables an easy and fast way to move around items between any number of tableViews. One can select a cell, drag it on top of another or in the same tableView and drop it.
+
+![](https://drive.google.com/open?id=0B1aAnBtF7faYYVdSc3hoV1ZMTmM)
 
 Check this videos to see it working:
 
